@@ -15,6 +15,8 @@ public class PF_Grid : MonoBehaviour
     private int gridSizeX = 0;
     private int gridSizeY = 0;
 
+    public List<PF_Node> path;
+
     private void Start()
     {
         nodeDiameter = nodeRadius * 2f;
@@ -32,8 +34,6 @@ public class PF_Grid : MonoBehaviour
         // Get the world position for the bottom left of the grid.
         Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
 
-        Debug.Log(worldBottomLeft);
-
         for (int x = 0; x < gridSizeX; x++)
         {
             for(int y = 0; y < gridSizeY; y++)
@@ -45,9 +45,39 @@ public class PF_Grid : MonoBehaviour
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
 
                 // Update the node information within the grid for this particular node.
-                grid[x, y] = new PF_Node(walkable, worldPoint);
+                grid[x, y] = new PF_Node(walkable, worldPoint, x, y);
             }
         }
+    }
+
+    public List<PF_Node> GetNeighbourNodes(PF_Node node_)
+    {
+        List<PF_Node> neighbourNodes = new List<PF_Node>();
+
+        // Loop through and get all neighbouring nodes.
+        for(int x = -1; x <= 1; x++)
+        {
+            for(int y = -1; y <= 1; y++)
+            {
+                if(x == 0 && y == 0)
+                {
+                    continue;
+                }
+
+                int checkX = node_.gridX + x;
+                int checkY = node_.gridY + y;
+
+                if (checkX >= 0 &&
+                    checkX < gridSizeX &&
+                    checkY >= 0 &&
+                    checkY < gridSizeY)
+                {
+                    neighbourNodes.Add(grid[checkX, checkY]);
+                }
+            }
+        }
+
+        return neighbourNodes;
     }
 
     public PF_Node GetNodeFromWorldPoint(Vector3 _worldPos)
@@ -64,7 +94,7 @@ public class PF_Grid : MonoBehaviour
 
         return grid[x, y];
     }
-
+    
     private void OnDrawGizmos()
     {
         // Wireframe to show grid boundaries in editor.
@@ -93,9 +123,34 @@ public class PF_Grid : MonoBehaviour
                     Gizmos.color = Color.cyan;
                 }
 
+                if(path != null)
+                {
+                    if(path.Contains(n))
+                    {
+                        Gizmos.color = Color.black;
+                    }
+                }
+
                 // Cubes to represent node positions.
                 Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - 0.1f));
             }
         }
     }
 }
+
+
+/*public APNode NodeFromWorldPosition(Vector3 worldPos)
+{ // Move coordinates in right position
+    float linearPosX = worldPos.x - worldBottomLeftCorner.x;
+    float linearPosY = worldPos.z - worldBottomLeftCorner.z;
+
+    // Get float value of positions in new coordinates 
+    float floatPosX = linearPosX / nodeDiameter;
+    float floatPosY = linearPosY / nodeDiameter;
+    int x = (int)floatPosX; int y = (int)floatPosY;
+
+    // Make sure that index values don't get out of grid bounds and take closest node to worldPos 
+    x = Mathf.Clamp(x, 0, xNodeAmount - 1);
+    y = Mathf.Clamp(y, 0, yNodeAmount - 1);
+    return grid[x, y];
+}﻿*/
