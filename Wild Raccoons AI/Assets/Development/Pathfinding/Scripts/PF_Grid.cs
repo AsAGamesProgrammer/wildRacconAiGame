@@ -12,8 +12,8 @@ public class PF_Grid : MonoBehaviour
     public PF_Node[,] grid;
 
     private float nodeDiameter = 1f;
-    private int gridSizeX = 0;
-    private int gridSizeY = 0;
+    public int gridSizeX = 0;
+    public int gridSizeY = 0;
 
     public List<PF_Node> path;
 
