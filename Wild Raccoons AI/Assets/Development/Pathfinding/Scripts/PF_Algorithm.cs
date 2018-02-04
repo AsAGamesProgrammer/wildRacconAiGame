@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Diagnostics;
 
-public class PF_Algorithm : MonoBehaviour {
+public class PF_Algorithm : MonoBehaviour
+{
 
     public Transform seeker;
     public Transform target;
 
-    PF_Grid grid;
+    private PF_Grid grid;
 
     private void Awake()
     {
@@ -16,11 +18,17 @@ public class PF_Algorithm : MonoBehaviour {
 
     private void Update()
     {
-        FindPath(seeker.position, target.position);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FindPath(seeker.position, target.position);
+        }
     }
 
     private void FindPath(Vector3 startPos_, Vector3 endPos_)
     {
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
+
         // Get the start and end nodes.
         PF_Node startNode = grid.GetNodeFromWorldPoint(startPos_);
         PF_Node endNode = grid.GetNodeFromWorldPoint(endPos_);
@@ -28,35 +36,29 @@ public class PF_Algorithm : MonoBehaviour {
         // Create two lists of nodes.
         // Open list will contain nodes to be evaluated.
         // Closed list will contain nodes that have already been evaluated.
-        List<PF_Node> openList = new List<PF_Node>();
-        HashSet<PF_Node> closedList = new HashSet<PF_Node>();
+        PF_Heap<PF_Node> openSet = new PF_Heap<PF_Node>(grid.MaxSize);
+        HashSet<PF_Node> closedSet = new HashSet<PF_Node>();
 
         // Add the starting node to our open list.
-        openList.Add(startNode);
+        openSet.Add(startNode);
 
-        // Loop through the openList.
-        while(openList.Count > 0)
+        // Loop through the openSet.
+        while(openSet.Count > 0)
         {
+            UnityEngine.Debug.Log("Wewlads");
+
             // Begin with the first element in the list.
-            PF_Node currentNode = openList[0];
+            PF_Node currentNode = openSet.RemoveFirst();
 
-            for(int i = 0; i < openList.Count - 1; i++)
-            {
-                // Compare the fCost between the two nodes.
-                if(openList[i].GetfCost() < currentNode.GetfCost() ||
-                   openList[i].GetfCost() == currentNode.GetfCost() &&
-                   openList[i].hCost < currentNode.hCost)
-                {
-                    currentNode = openList[i];
-                }
-            }
-
-            openList.Remove(currentNode);
-            closedList.Add(currentNode);
+            closedSet.Add(currentNode);
 
             // Path has been found.
             if(currentNode == endNode)
             {
+                sw.Stop();
+
+                UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
+
                 CalculatePath(startNode, endNode);
 
                 return;
@@ -65,7 +67,7 @@ public class PF_Algorithm : MonoBehaviour {
             foreach(PF_Node neighbour in grid.GetNeighbourNodes(currentNode))
             {
                 // Check if the neighbour is not walkable, or already in the closed list.
-                if(!neighbour.walkable || closedList.Contains(neighbour))
+                if(!neighbour.walkable || closedSet.Contains(neighbour))
                 {
                     continue;
                 }
@@ -75,7 +77,7 @@ public class PF_Algorithm : MonoBehaviour {
 
                 // If the new move cost is smaller than the current, or the open list does not contain this neighbour.
                 if(newNeighbourMoveCost < neighbour.gCost ||
-                    !openList.Contains(neighbour))
+                    !openSet.Contains(neighbour))
                 {
                     // Update the gCost and hCost.
                     neighbour.gCost = newNeighbourMoveCost;
@@ -84,10 +86,15 @@ public class PF_Algorithm : MonoBehaviour {
                     // Update the parent node.
                     neighbour.parentNode = currentNode;
 
-                    // Add it to the open list if it is not currently there.
-                    if(!openList.Contains(neighbour))
+                    // Add it to the open set if it is not currently there.
+                    if(!openSet.Contains(neighbour))
                     {
-                        openList.Add(neighbour);
+                        openSet.Add(neighbour);
+                    }
+                    // Otherwise update it.
+                    else
+                    {
+                        openSet.UpdateItem(neighbour);
                     }
                 }
             }
