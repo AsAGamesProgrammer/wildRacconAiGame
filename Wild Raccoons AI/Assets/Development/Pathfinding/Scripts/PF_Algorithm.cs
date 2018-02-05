@@ -2,106 +2,117 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using System;
 
 public class PF_Algorithm : MonoBehaviour
 {
-
-    public Transform seeker;
-    public Transform target;
+    private PF_AlgorithmManager requestManager;
 
     private PF_Grid grid;
 
     private void Awake()
     {
+        requestManager = GetComponent<PF_AlgorithmManager>();
         grid = GetComponent<PF_Grid>();
     }
 
-    private void Update()
+    public void StartFindPath(Vector3 startPos_, Vector3 endPos_)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FindPath(seeker.position, target.position);
-        }
+        StartCoroutine(FindPath(startPos_, endPos_));
     }
 
-    private void FindPath(Vector3 startPos_, Vector3 endPos_)
+    IEnumerator FindPath(Vector3 startPos_, Vector3 endPos_)
     {
         Stopwatch sw = new Stopwatch();
         sw.Start();
+
+        Vector3[] waypoints = new Vector3[0];
+        bool pathSuccess = false;
 
         // Get the start and end nodes.
         PF_Node startNode = grid.GetNodeFromWorldPoint(startPos_);
         PF_Node endNode = grid.GetNodeFromWorldPoint(endPos_);
 
-        // Create two lists of nodes.
-        // Open list will contain nodes to be evaluated.
-        // Closed list will contain nodes that have already been evaluated.
-        PF_Heap<PF_Node> openSet = new PF_Heap<PF_Node>(grid.MaxSize);
-        HashSet<PF_Node> closedSet = new HashSet<PF_Node>();
-
-        // Add the starting node to our open list.
-        openSet.Add(startNode);
-
-        // Loop through the openSet.
-        while(openSet.Count > 0)
+        // Only search if start and end are both walkable nodes.
+        if(startNode.walkable && endNode.walkable)
         {
-            UnityEngine.Debug.Log("Wewlads");
+            // Create two lists of nodes.
+            // Open list will contain nodes to be evaluated.
+            // Closed list will contain nodes that have already been evaluated.
+            PF_Heap<PF_Node> openSet = new PF_Heap<PF_Node>(grid.MaxSize);
+            HashSet<PF_Node> closedSet = new HashSet<PF_Node>();
 
-            // Begin with the first element in the list.
-            PF_Node currentNode = openSet.RemoveFirst();
+            // Add the starting node to our open list.
+            openSet.Add(startNode);
 
-            closedSet.Add(currentNode);
-
-            // Path has been found.
-            if(currentNode == endNode)
+            // Loop through the openSet.
+            while (openSet.Count > 0)
             {
-                sw.Stop();
+                // Begin with the first element in the list.
+                PF_Node currentNode = openSet.RemoveFirst();
 
-                UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
+                closedSet.Add(currentNode);
 
-                CalculatePath(startNode, endNode);
-
-                return;
-            }
-
-            foreach(PF_Node neighbour in grid.GetNeighbourNodes(currentNode))
-            {
-                // Check if the neighbour is not walkable, or already in the closed list.
-                if(!neighbour.walkable || closedSet.Contains(neighbour))
+                // Path has been found.
+                if (currentNode == endNode)
                 {
-                    continue;
+                    sw.Stop();
+
+                    UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
+
+                    pathSuccess = true;
+
+                    break;
                 }
 
-                // Get the cost to move to the neighbour.
-                int newNeighbourMoveCost = currentNode.gCost + GetDistance(currentNode, neighbour);
-
-                // If the new move cost is smaller than the current, or the open list does not contain this neighbour.
-                if(newNeighbourMoveCost < neighbour.gCost ||
-                    !openSet.Contains(neighbour))
+                foreach (PF_Node neighbour in grid.GetNeighbourNodes(currentNode))
                 {
-                    // Update the gCost and hCost.
-                    neighbour.gCost = newNeighbourMoveCost;
-                    neighbour.hCost = GetDistance(neighbour, endNode);
-
-                    // Update the parent node.
-                    neighbour.parentNode = currentNode;
-
-                    // Add it to the open set if it is not currently there.
-                    if(!openSet.Contains(neighbour))
+                    // Check if the neighbour is not walkable, or already in the closed list.
+                    if (!neighbour.walkable || closedSet.Contains(neighbour))
                     {
-                        openSet.Add(neighbour);
+                        continue;
                     }
-                    // Otherwise update it.
-                    else
+
+                    // Get the cost to move to the neighbour.
+                    int newNeighbourMoveCost = currentNode.gCost + GetDistance(currentNode, neighbour);
+
+                    // If the new move cost is smaller than the current, or the open list does not contain this neighbour.
+                    if (newNeighbourMoveCost < neighbour.gCost ||
+                        !openSet.Contains(neighbour))
                     {
-                        openSet.UpdateItem(neighbour);
+                        // Update the gCost and hCost.
+                        neighbour.gCost = newNeighbourMoveCost;
+                        neighbour.hCost = GetDistance(neighbour, endNode);
+
+                        // Update the parent node.
+                        neighbour.parentNode = currentNode;
+
+                        // Add it to the open set if it is not currently there.
+                        if (!openSet.Contains(neighbour))
+                        {
+                            openSet.Add(neighbour);
+                        }
+                        // Otherwise update it.
+                        else
+                        {
+                            openSet.UpdateItem(neighbour);
+                        }
                     }
                 }
             }
         }
+
+        yield return null;
+
+        if(pathSuccess)
+        {
+            waypoints = CalculatePath(startNode, endNode);
+        }
+
+        requestManager.FinishedProcessingPath(waypoints, pathSuccess);
     }
 
-    private void CalculatePath(PF_Node startNode_, PF_Node endNode_)
+    private Vector3[] CalculatePath(PF_Node startNode_, PF_Node endNode_)
     {
         List<PF_Node> path = new List<PF_Node>();
 
@@ -114,10 +125,37 @@ public class PF_Algorithm : MonoBehaviour
             currentNode = currentNode.parentNode;
         }
 
-        // Reverse the path to get it from start to end.
-        path.Reverse();
+        // Simplify the path by removing duplicate commands from adjacent nodes when direction does not change.
+        Vector3[] waypoints = SimplifyPath(path);
 
-        grid.path = path;
+        // Reverse the waypoints to get it from start to end.
+        Array.Reverse(waypoints);
+
+        return waypoints;
+    }
+
+    Vector3[] SimplifyPath(List<PF_Node> path_)
+    {
+        List<Vector3> waypoints = new List<Vector3>();
+
+        Vector2 directionOld = Vector2.zero;
+
+        // Loop through the waypoints in the path and ignore duplicate changes in direction.
+        for(int i = 1; i < path_.Count; i++)
+        {
+            Vector2 directionNew = new Vector2(path_[i - 1].gridX - path_[i].gridX, path_[i - 1].gridY - path_[i].gridY);
+
+            // When the direction changes, add the node to the path.
+            if(directionNew != directionOld)
+            {
+                waypoints.Add(path_[i].worldPos);
+            }
+
+            // Update the current direction;
+            directionOld = directionNew;
+        }
+
+        return waypoints.ToArray();
     }
 
     private int GetDistance(PF_Node nodeA, PF_Node nodeB)

@@ -6,7 +6,7 @@ public class PF_Grid : MonoBehaviour
 {
     public Transform player;
 
-    public bool enablePathDebugVisualsOnly = false;
+    public bool displayGridGizmos = false;
 
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize = Vector2.zero;
@@ -17,9 +17,7 @@ public class PF_Grid : MonoBehaviour
     private int gridSizeX = 0;
     private int gridSizeY = 0;
 
-    public List<PF_Node> path;
-
-    private void Start()
+    private void Awake()
     {
         nodeDiameter = nodeRadius * 2f;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
@@ -111,56 +109,31 @@ public class PF_Grid : MonoBehaviour
         // Wireframe to show grid boundaries in editor.
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
-        if(enablePathDebugVisualsOnly)
+        if (grid != null && displayGridGizmos)
         {
-            if(path != null)
+            PF_Node playerNode = GetNodeFromWorldPoint(player.position);
+
+            foreach (PF_Node n in grid)
             {
-                foreach(PF_Node n in path)
+                if (n.walkable)
                 {
-                    Gizmos.color = Color.black;
-
-                    // Cubes to represent node positions.
-                    Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - 0.1f));
+                    // Walkable.
+                    Gizmos.color = Color.white;
                 }
-            }
-        }
-        else
-        {
-            if (grid != null)
-            {
-                PF_Node playerNode = GetNodeFromWorldPoint(player.position);
-
-                foreach (PF_Node n in grid)
+                else
                 {
-                    if (n.walkable)
-                    {
-                        // Walkable.
-                        Gizmos.color = Color.white;
-                    }
-                    else
-                    {
-                        // Obstacle.
-                        Gizmos.color = Color.red;
-                    }
-
-                    if (playerNode == n)
-                    {
-                        // Player.
-                        Gizmos.color = Color.cyan;
-                    }
-
-                    if (path != null)
-                    {   
-                        // Path.
-                        if (path.Contains(n))
-                        {
-                            Gizmos.color = Color.black;
-                        }
-                    }
-
-                    // Cubes to represent node positions.
-                    Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - 0.1f));
+                    // Obstacle.
+                    Gizmos.color = Color.red;
                 }
+
+                if (playerNode == n)
+                {
+                    // Player.
+                    Gizmos.color = Color.cyan;
+                }
+
+                // Cubes to represent node positions.
+                Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - 0.1f));
             }
         }
     }
