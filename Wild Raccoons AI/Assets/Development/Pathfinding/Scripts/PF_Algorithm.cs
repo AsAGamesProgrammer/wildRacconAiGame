@@ -1,13 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< HEAD
 using System.Diagnostics;
 using System;
-=======
-
-public class PF_Algorithm : MonoBehaviour {
->>>>>>> CityGeneration
 
 public class PF_Algorithm : MonoBehaviour
 {
@@ -106,7 +101,6 @@ public class PF_Algorithm : MonoBehaviour
                 }
             }
         }
-<<<<<<< HEAD
 
         yield return null;
 
@@ -119,11 +113,6 @@ public class PF_Algorithm : MonoBehaviour
     }
 
     private Vector3[] CalculatePath(PF_Node startNode_, PF_Node endNode_)
-=======
-    }
-
-    private void CalculatePath(PF_Node startNode_, PF_Node endNode_)
->>>>>>> CityGeneration
     {
         List<PF_Node> path = new List<PF_Node>();
 
@@ -169,12 +158,6 @@ public class PF_Algorithm : MonoBehaviour
         return waypoints.ToArray();
     }
 
-<<<<<<< HEAD
-=======
-        grid.path = path;
-    }
-
->>>>>>> CityGeneration
     private int GetDistance(PF_Node nodeA, PF_Node nodeB)
     {
         // Get the x and y distances between the two nodes.
