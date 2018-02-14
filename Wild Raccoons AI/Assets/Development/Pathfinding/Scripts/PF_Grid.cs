@@ -11,11 +11,11 @@ public class PF_Grid : MonoBehaviour
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize = Vector2.zero;
     public float nodeRadius = 0f;
-    private PF_Node[,] grid;
+    public PF_Node[,] grid;
 
     private float nodeDiameter = 1f;
-    private int gridSizeX = 0;
-    private int gridSizeY = 0;
+    public int gridSizeX = 0;
+    public int gridSizeY = 0;
 
     private void Awake()
     {
