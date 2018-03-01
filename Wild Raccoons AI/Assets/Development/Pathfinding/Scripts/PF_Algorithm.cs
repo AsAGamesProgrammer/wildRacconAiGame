@@ -33,6 +33,8 @@ public class PF_Algorithm : MonoBehaviour
         PF_Node startNode = grid.GetNodeFromWorldPoint(startPos_);
         PF_Node endNode = grid.GetNodeFromWorldPoint(endPos_);
 
+        startNode.parentNode = startNode;
+
         // Only search if start and end are both walkable nodes.
         if(startNode.walkable && endNode.walkable)
         {
@@ -51,6 +53,7 @@ public class PF_Algorithm : MonoBehaviour
                 // Begin with the first element in the list.
                 PF_Node currentNode = openSet.RemoveFirst();
 
+                // Add the starting node to the closed set.
                 closedSet.Add(currentNode);
 
                 // Path has been found.
@@ -58,7 +61,7 @@ public class PF_Algorithm : MonoBehaviour
                 {
                     sw.Stop();
 
-                    UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
+                    //UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
 
                     pathSuccess = true;
 
@@ -74,11 +77,10 @@ public class PF_Algorithm : MonoBehaviour
                     }
 
                     // Get the cost to move to the neighbour.
-                    int newNeighbourMoveCost = currentNode.gCost + GetDistance(currentNode, neighbour);
+                    int newNeighbourMoveCost = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbour.movementPenalty;
 
                     // If the new move cost is smaller than the current, or the open list does not contain this neighbour.
-                    if (newNeighbourMoveCost < neighbour.gCost ||
-                        !openSet.Contains(neighbour))
+                    if (newNeighbourMoveCost < neighbour.gCost || !openSet.Contains(neighbour))
                     {
                         // Update the gCost and hCost.
                         neighbour.gCost = newNeighbourMoveCost;
@@ -116,6 +118,7 @@ public class PF_Algorithm : MonoBehaviour
     {
         List<PF_Node> path = new List<PF_Node>();
 
+        // Begin at the end node.
         PF_Node currentNode = endNode_;
 
         // Loop through from the end node to the start node and construct the path.

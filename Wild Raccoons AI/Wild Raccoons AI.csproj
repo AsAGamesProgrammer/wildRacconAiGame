@@ -78,11 +78,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Development\Pathfinding\Scripts\ObjectPatrol.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_Algorithm.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_AlgorithmManager.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_Grid.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_Heap.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_Node.cs" />
+    <Compile Include="Assets\Development\Pathfinding\Scripts\PF_Player.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_Unit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

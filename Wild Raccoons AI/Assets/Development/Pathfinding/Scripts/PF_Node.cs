@@ -8,6 +8,7 @@ public class PF_Node : IHeapItem<PF_Node>
     public Vector3 worldPos = Vector3.zero;
     public int gridX;
     public int gridY;
+    public int movementPenalty;
 
     public int gCost;
     public int hCost;
@@ -17,12 +18,13 @@ public class PF_Node : IHeapItem<PF_Node>
 
     int heapIndex;
 
-    public PF_Node(bool walkable_, Vector3 worldPos_, int gridX_, int gridY_)
+    public PF_Node(bool walkable_, Vector3 worldPos_, int gridX_, int gridY_, int penalty_)
     {
         walkable = walkable_;
         worldPos = worldPos_;
         gridX = gridX_;
         gridY = gridY_;
+        movementPenalty = penalty_;
     }
 
     public int GetfCost()

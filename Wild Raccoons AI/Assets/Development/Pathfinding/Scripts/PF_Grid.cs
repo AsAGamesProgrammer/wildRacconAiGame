@@ -11,6 +11,10 @@ public class PF_Grid : MonoBehaviour
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize = Vector2.zero;
     public float nodeRadius = 0f;
+    public TerrainType[] walkableRegions;
+    LayerMask walkableMask;
+    Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
+
     private PF_Node[,] grid;
 
     private float nodeDiameter = 1f;
@@ -23,7 +27,21 @@ public class PF_Grid : MonoBehaviour
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
 
+        // Store the walkable regions in a layermask for later raycasting.
+        foreach(TerrainType region in walkableRegions)
+        {
+            walkableMask.value |= region.terrainMask.value;
+
+            // Get the index of the layer. Find the power to which 2 neds to be raised to make the mask bitwise value.
+            walkableRegionsDictionary.Add((int)Mathf.Log(region.terrainMask.value, 2), region.terrainPenalty);
+        }
+
         // Generate the nodes which will comprise the grid.
+        CreateGrid();
+    }
+
+    private void Update()
+    {
         CreateGrid();
     }
 
@@ -52,8 +70,25 @@ public class PF_Grid : MonoBehaviour
                 // Determine if the node is walkable or should be considered obstructed.
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
 
+                int movementPenalty = 0;
+
+                // Raycast
+                if(walkable)
+                {
+                    // Start the ray in the sky and fire directly down.
+                    Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);
+
+                    RaycastHit hit;
+
+                    if(Physics.Raycast(ray, out hit, 100, walkableMask))
+                    {
+                        // Get the movement penalty of the terrain type.
+                        walkableRegionsDictionary.TryGetValue(hit.collider.gameObject.layer, out movementPenalty);
+                    }
+                }
+
                 // Update the node information within the grid for this particular node.
-                grid[x, y] = new PF_Node(walkable, worldPoint, x, y);
+                grid[x, y] = new PF_Node(walkable, worldPoint, x, y, movementPenalty);
             }
         }
     }
@@ -81,6 +116,7 @@ public class PF_Grid : MonoBehaviour
                     checkY >= 0 &&
                     checkY < gridSizeY)
                 {
+                    // Add the node to the neighbour nodes.
                     neighbourNodes.Add(grid[checkX, checkY]);
                 }
             }
@@ -119,6 +155,10 @@ public class PF_Grid : MonoBehaviour
                 {
                     // Walkable.
                     Gizmos.color = Color.white;
+                    if(n.movementPenalty == 5)
+                    {
+                        Gizmos.color = Color.green;
+                    }
                 }
                 else
                 {
@@ -136,6 +176,13 @@ public class PF_Grid : MonoBehaviour
                 Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - 0.1f));
             }
         }
+    }
+
+    [System.Serializable]
+    public class TerrainType
+    {
+        public LayerMask terrainMask;
+        public int terrainPenalty;
     }
 }
 

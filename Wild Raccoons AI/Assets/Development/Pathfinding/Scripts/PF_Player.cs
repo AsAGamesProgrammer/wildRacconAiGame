@@ -2,40 +2,72 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PF_Unit : MonoBehaviour
+public class PF_Player : MonoBehaviour
 {
-    public Transform target;
-
-    private float movespeed = 25f;
+    private float movespeed = 20f;
     private Vector3[] path;
     private int targetIndex;
 
-    private float newPathCooldown = 0.25f;
+    public Camera playerCam;
+
+    private float clickCooldown = 0.5f;
+    private float clickCooldownRemaining = 0f;
+
+    private float newPathCooldown = 0.1f;
     private float newPathCooldownRemaining;
 
+    private Vector3 targetPosition = Vector3.zero;
     private bool targetSet = false;
     private bool targetReached = false;
 
+    public GameObject targetIndicator;
+
+    private int debugEnumCount = 0;
+
     private void Update()
     {
-        if (newPathCooldown > 0f)
+        if(clickCooldown > 0f)
+        {
+            clickCooldown -= Time.deltaTime;
+        }
+
+        if(newPathCooldown > 0f)
         {
             newPathCooldownRemaining -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if(clickCooldownRemaining <= 0f)
         {
-            PF_AlgorithmManager.RequestPath(transform.position, target.position, OnPathFound);
+            if (Input.GetMouseButtonDown(1))
+            {
+                Ray ray = playerCam.ScreenPointToRay(Input.mousePosition);
+                Debug.DrawRay(ray.origin, ray.direction * 1000, Color.yellow, 2f);
 
-            targetSet = true;
-            targetReached = false;
+                RaycastHit hit;
+                
+                // 
+                if (Physics.Raycast(ray, out hit, 1000f, 1 << LayerMask.NameToLayer("Grass")))
+                {
+                    targetPosition = hit.point;
+
+                    targetIndicator.transform.position = targetPosition;
+                    targetIndicator.SetActive(true);
+
+                    PF_AlgorithmManager.RequestPath(transform.position, targetPosition, OnPathFound);
+
+                    targetSet = true;
+                    targetReached = false;
+                }
+
+                clickCooldownRemaining = clickCooldown;
+            }
         }
 
         if (newPathCooldownRemaining <= 0f)
         {
             if (targetSet && !targetReached)
             {
-                PF_AlgorithmManager.RequestPath(transform.position, target.position, OnPathFound);
+                PF_AlgorithmManager.RequestPath(transform.position, targetPosition, OnPathFound);
 
                 newPathCooldownRemaining = newPathCooldown;
             }
@@ -45,7 +77,7 @@ public class PF_Unit : MonoBehaviour
     public void OnPathFound(Vector3[] newPath_, bool pathSuccessful_)
     {
         // If a path has been found, start to follow that path.
-        if(pathSuccessful_)
+        if (pathSuccessful_)
         {
             path = newPath_;
             targetIndex = 0;
@@ -56,6 +88,9 @@ public class PF_Unit : MonoBehaviour
 
     IEnumerator FollowPath()
     {
+        debugEnumCount++;
+
+        // Make sure we aren't trying to path to our current position. (Clicking the same spot multiple times.)
         if(path.Length > 0)
         {
             Vector3 currentWaypoint = path[0];
@@ -73,6 +108,8 @@ public class PF_Unit : MonoBehaviour
                     {
                         targetSet = false;
                         targetReached = true;
+
+                        targetIndicator.SetActive(false);
 
                         yield break;
                     }
@@ -96,14 +133,14 @@ public class PF_Unit : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        if(path != null)
+        if (path != null)
         {
-            for(int i = targetIndex; i < path.Length; i++)
+            for (int i = targetIndex; i < path.Length; i++)
             {
                 Gizmos.color = Color.blue;
                 Gizmos.DrawCube(path[i], Vector3.one * 1.5f);
 
-                if(i == targetIndex)
+                if (i == targetIndex)
                 {
                     Gizmos.DrawLine(transform.position, path[i]);
                 }
