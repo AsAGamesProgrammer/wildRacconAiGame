@@ -13,8 +13,11 @@ public class BossAttacks : MonoBehaviour {
     //Melee attack
     public float meleeAttackRadius = 10;
     public Vector3 sphereGrowthVector = new Vector3(0.01f, 0.01f, 0.01f);
-    public GameObject meleeAttackSphere;    //prefab
+    public GameObject explosionSpherePrefab;    //prefab
     GameObject meleeAttack;     //Object
+
+    //Shooting
+    public GameObject bulletPrefab;
 
     //Flags
     bool attackPrepared = false;
@@ -30,7 +33,10 @@ public class BossAttacks : MonoBehaviour {
 	void FixedUpdate ()
     {
         performMeleeAttack();
-	}
+        //shootAt(new Vector3(0, 0, 1));
+        shootAt(new Vector3(-0.3f, 0, -1));
+        //shootAt(new Vector3(0.4f, 0, -1));
+    }
 
     //MELEE ATTACK 1
     //Create a circle around the boss
@@ -41,7 +47,7 @@ public class BossAttacks : MonoBehaviour {
     {
         if (!attackPrepared)
         {
-            meleeAttack = Instantiate(meleeAttackSphere, boss.transform);
+            meleeAttack = Instantiate(explosionSpherePrefab, boss.transform);
             attackPrepared = true;
         }
     }
@@ -64,4 +70,19 @@ public class BossAttacks : MonoBehaviour {
             attackPrepared = false;
         }
     }
+
+    //SHOOT
+    //Creates a bullet with given direction, speed and maximum distance from the boss
+    void shootAt(Vector3 direction)
+    {
+        GameObject newBullet = Instantiate(bulletPrefab, boss.transform);
+        newBullet.GetComponent<BulletScript>().direction = direction;
+    }
+
+    //BOMB ATTACK
+    //Launch bombs at ransom/semi random position
+    //Melee attack for each circle with delay
+
+
+
 }
