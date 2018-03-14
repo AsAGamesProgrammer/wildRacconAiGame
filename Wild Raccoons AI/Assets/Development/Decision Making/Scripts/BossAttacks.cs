@@ -32,10 +32,7 @@ public class BossAttacks : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        performMeleeAttack();
-        //shootAt(new Vector3(0, 0, 1));
-        shootAt(new Vector3(-0.3f, 0, -1));
-        //shootAt(new Vector3(0.4f, 0, -1));
+
     }
 
     //MELEE ATTACK 1
@@ -52,7 +49,8 @@ public class BossAttacks : MonoBehaviour {
         }
     }
 
-    void performMeleeAttack()
+    //Returns true when finished
+    public bool performMeleeAttack()
     {
         prepareMeleeAttack();
 
@@ -62,18 +60,20 @@ public class BossAttacks : MonoBehaviour {
         {
             Debug.Log(meleeAttack.transform.localScale.x);
             meleeAttack.transform.localScale += sphereGrowthVector;
+            return false;
         }
         else
         {
             Destroy(meleeAttack);
             Debug.Log("Destoryed");
             attackPrepared = false;
+            return true;
         }
     }
 
     //SHOOT
     //Creates a bullet with given direction, speed and maximum distance from the boss
-    void shootAt(Vector3 direction)
+    public void shootAt(Vector3 direction)
     {
         GameObject newBullet = Instantiate(bulletPrefab, boss.transform);
         newBullet.GetComponent<BulletScript>().direction = direction;
