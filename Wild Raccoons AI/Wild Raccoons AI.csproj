@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Development\Decision Making\Scripts\BossAttacks.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\ObjectPatrol.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_Algorithm.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\PF_AlgorithmManager.cs" />
