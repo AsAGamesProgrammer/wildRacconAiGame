@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObjectPatrol : MonoBehaviour
 {
     private Vector3 startingPosition;
-    private Vector3 movementScalar = new Vector3(10f, 0f, 0f);
+    private Vector3 movementScalar = new Vector3(0f, 5f, 0f);
 
     private void Awake()
     {
