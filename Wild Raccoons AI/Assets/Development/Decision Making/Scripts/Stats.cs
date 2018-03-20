@@ -6,6 +6,7 @@ public class Stats : MonoBehaviour {
 
     float health = 100;
     public Orientation orientation = Orientation.Top;
+    public bool pShieldEnabled = false;
     
     //ORIENTATION
     public Orientation getOrientation()

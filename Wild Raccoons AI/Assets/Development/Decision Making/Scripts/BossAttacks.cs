@@ -25,11 +25,23 @@ public class BossAttacks : MonoBehaviour {
     //Orientation
     Dictionary<Orientation, Transform> orientationDictionary = new Dictionary<Orientation, Transform>();
 
+    //Shields
+    bool shieldEnabled = false;
+    public GameObject physicalShieldPrefab;
+    GameObject physicalShield;              //actual shield
+    public float maxShieldTime = 5f;
+    public float fadePerSecond = 1f;
+
+    //Time
+    float currentTime = 0f;
+
     //Flags
     bool attackPrepared = false;
     bool attackExecuting = false;
     bool attackFinished = false;
 
+
+    //START
     private void Start()
     {
         //Get scripts
@@ -52,6 +64,29 @@ public class BossAttacks : MonoBehaviour {
                 case "Right":
                     orientationDictionary.Add(Orientation.Right, position.transform);
                     break;
+            }
+        }
+    }
+
+    //UPDATE
+    private void Update()
+    {
+        //If a chield is on
+        if(shieldEnabled)
+        {
+            //Decrease time
+            currentTime -= Time.deltaTime;
+            var material = physicalShield.GetComponent<Renderer>().material;
+            var color = material.color;
+
+            material.color = new Color(color.r, color.g, color.b, color.a - (fadePerSecond * Time.deltaTime));
+
+            //When time is out
+            if (currentTime <=0)
+            {
+                Destroy(physicalShield);        //Destroy a shield
+                shieldEnabled = false;          //Set flag to false
+                bossStats.pShieldEnabled = false;
             }
         }
     }
@@ -113,4 +148,21 @@ public class BossAttacks : MonoBehaviour {
         bossStats.setOrientation(orientation);
     }
 
+    //PHYSICAL SHIELD
+    //Apply physical shield
+    public void applyPhysicalShield()
+    {
+        if(!shieldEnabled)
+        {
+            //Instantiate
+            physicalShield = Instantiate(physicalShieldPrefab, boss.transform);
+
+            //Set flag
+            shieldEnabled = true;
+            bossStats.pShieldEnabled = true;
+
+            //Set time
+            currentTime = maxShieldTime;
+        }
+    }
 }

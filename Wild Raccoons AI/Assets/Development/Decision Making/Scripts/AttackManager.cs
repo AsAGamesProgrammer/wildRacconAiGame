@@ -23,30 +23,34 @@ public class AttackManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //Perform melee attack
-        if(attackList.performMeleeAttack())
+        attackList.applyPhysicalShield();           //shield
+
+        if (!bossStats.pShieldEnabled)              //if shield is not up
         {
-            //Shoot three times at the end of the attack
-            attackList.shootAt(new Vector3(1f, 0, 0.5f));
-            attackList.shootAt(new Vector3(1f, 0, 0));
-            attackList.shootAt(new Vector3(1f, 0, -0.5f));
-
-            //Teleport
-            switch(bossStats.getOrientation())
+            //Perform melee attack
+            if (attackList.performMeleeAttack())    //if aura ttack started
             {
-                case Orientation.Left:
-                    attackList.teleport(Orientation.Top);
-                    break;
+                //Shoot three times at the end of the attack
+                attackList.shootAt(new Vector3(1f, 0, 0.5f));
+                attackList.shootAt(new Vector3(1f, 0, 0));
+                attackList.shootAt(new Vector3(1f, 0, -0.5f));
 
-                case Orientation.Top:
-                    attackList.teleport(Orientation.Right);
-                    break;
+                //Teleport
+                switch (bossStats.getOrientation())
+                {
+                    case Orientation.Left:
+                        attackList.teleport(Orientation.Top);
+                        break;
 
-                case Orientation.Right:
-                    attackList.teleport(Orientation.Left);
-                    break;
+                    case Orientation.Top:
+                        attackList.teleport(Orientation.Right);
+                        break;
+
+                    case Orientation.Right:
+                        attackList.teleport(Orientation.Left);
+                        break;
+                }
             }
-
         }
-	}
+    }
 }
