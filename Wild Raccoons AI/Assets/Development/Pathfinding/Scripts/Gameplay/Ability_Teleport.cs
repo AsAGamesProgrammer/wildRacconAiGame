@@ -59,11 +59,4 @@ public class Ability_Teleport : Ability_Base
 
         cooldownRemaining = cooldown;
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-
-        Gizmos.DrawSphere(player.transform.position, range);
-    }
 }

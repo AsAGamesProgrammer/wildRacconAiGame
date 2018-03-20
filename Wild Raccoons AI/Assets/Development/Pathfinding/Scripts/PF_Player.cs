@@ -1,10 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PF_Player : MonoBehaviour
 {
-    private float movespeed = 20f;
+    private float currentHealth = 1000f;
+    private float maxHealth = 1000f;
+    private float currentHealthRegen = 0f;
+
+    private float currentMana = 100f;
+    private float maxMana = 100f;
+    private float currentManaRegen = 5f;
+
+    private float baseMovespeed = 20f;
+    private float currentMovespeed = 20f;
+
     public float turnSpeed = 3f;
     public float turnDistance = 5f;
 
@@ -24,16 +35,27 @@ public class PF_Player : MonoBehaviour
 
     private GameObject rangeIndicator;
 
+    public Slider healthSlider;
+    public Text healthText;
+
+    public Slider manaSlider;
+    public Text manaText;
+
     private void Awake()
     {
         rangeIndicator = GameObject.FindGameObjectWithTag("Range Indicator");
 
         rangeIndicator.SetActive(false);
+
+        currentHealth = 550f;
+        currentMana = 40f;
     }
 
     private void Update()
     {
         clickCooldown -= Time.deltaTime;
+
+        RefreshUI();
 
         newPathCooldownRemaining -= Time.deltaTime;
 
@@ -101,7 +123,6 @@ public class PF_Player : MonoBehaviour
             {
                 Vector2 pos2D = new Vector2(transform.position.x, transform.position.z);
 
-                // 
                 while (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
                 {
                     // Break out of the while loop if the path is finished.
@@ -132,7 +153,7 @@ public class PF_Player : MonoBehaviour
 
                     transform.rotation = Quaternion.Euler(temp);
 
-                    transform.Translate(Vector3.forward * Time.deltaTime * movespeed, Space.Self);
+                    transform.Translate(Vector3.forward * Time.deltaTime * currentMovespeed, Space.Self);
                 }
 
                 yield return null;
@@ -151,6 +172,116 @@ public class PF_Player : MonoBehaviour
 
         targetSet = false;
         targetReached = true;
+    }
+
+    private void RefreshUI()
+    {
+        healthSlider.value = currentHealth;
+        healthSlider.maxValue = maxHealth;
+        healthText.text = currentHealth.ToString() + " / " + maxHealth.ToString();
+
+        manaSlider.value = currentMana;
+        manaSlider.maxValue = maxMana;
+        manaText.text = currentMana.ToString() + " / " + maxMana.ToString();
+    }
+
+    // Current Health
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+    public void SetCurrentHealth(float newHealthValue_)
+    {
+        currentHealth = newHealthValue_;
+    }
+    public void ModifyCurrentHealth(float modifyValue_)
+    {
+        currentHealth += modifyValue_;
+
+        // Check if the value is greater than the max health value.
+        if(currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+    }
+
+    // Max Health
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+    public void SetMaxHealth(float newHealthValue_)
+    {
+        maxHealth = newHealthValue_;
+    }
+
+    // Health Regen
+    public float GetHealthRegen()
+    {
+        return currentHealthRegen;
+    }
+    public void SetHealthRegen(float newHealthValue_)
+    {
+        currentHealthRegen = newHealthValue_;
+    }
+
+    // Current Mana
+    public float GetCurrentMana()
+    {
+        return currentMana;
+    }
+    public void SetCurrentMana(float newManaValue_)
+    {
+        currentMana = newManaValue_;
+    }
+    public void ModifyCurrentMana(float modifyValue_)
+    {
+        currentMana += modifyValue_;
+
+        if(currentMana > maxMana)
+        {
+            currentMana = maxMana;
+        }
+    }
+
+    // Max Mana
+    public float GetMaxMana()
+    {
+        return maxMana;
+    }
+    public void SetMaxMana(float newManaValue_)
+    {
+        maxMana = newManaValue_;
+    }
+
+    // Mana Regen
+    public float GetManaRegen()
+    {
+        return currentManaRegen;
+    }
+    public void SetManaRegen(float newManaValue_)
+    {
+        currentHealthRegen = newManaValue_;
+    }
+
+    // Base Movespeed
+    public float GetBaseMovespeed()
+    {
+        return baseMovespeed;
+    }
+    public void SetBaseMovespeed(float newBaseMovespeed_)
+    {
+        baseMovespeed = newBaseMovespeed_;
+    }
+
+    // Current Movespeed
+    public float GetCurrentMovespeed()
+    {
+        return currentManaRegen;
+    }
+    public void SetCurrentMovespeed(float newMovespeed_)
+    {
+        currentManaRegen = newMovespeed_;
     }
 
     public void OnDrawGizmos()
