@@ -10,6 +10,9 @@ public class BossAttacks : MonoBehaviour {
     //Boss
     public GameObject boss;
 
+    //Scripts
+    Stats bossStats;
+
     //Melee attack
     public float meleeAttackRadius = 10;
     public Vector3 sphereGrowthVector = new Vector3(0.01f, 0.01f, 0.01f);
@@ -19,20 +22,38 @@ public class BossAttacks : MonoBehaviour {
     //Shooting
     public GameObject bulletPrefab;
 
+    //Orientation
+    Dictionary<Orientation, Transform> orientationDictionary = new Dictionary<Orientation, Transform>();
+
     //Flags
     bool attackPrepared = false;
     bool attackExecuting = false;
     bool attackFinished = false;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate ()
+    private void Start()
     {
+        //Get scripts
+        bossStats = GetComponent<Stats>();
 
+        //Populate dictionary
+        GameObject[] positions = GameObject.FindGameObjectsWithTag("Orientation");
+        foreach (var position in positions)
+        {
+            switch(position.name)
+            {
+                case "Top":
+                    orientationDictionary.Add(Orientation.Top, position.transform);
+                    break;
+
+                case "Left":
+                    orientationDictionary.Add(Orientation.Left, position.transform);
+                    break;
+
+                case "Right":
+                    orientationDictionary.Add(Orientation.Right, position.transform);
+                    break;
+            }
+        }
     }
 
     //MELEE ATTACK 1
@@ -79,10 +100,17 @@ public class BossAttacks : MonoBehaviour {
         newBullet.GetComponent<BulletScript>().direction = direction;
     }
 
-    //BOMB ATTACK
-    //Launch bombs at ransom/semi random position
-    //Melee attack for each circle with delay
 
+    //SWITCH SIDES
+    //Relocates the boss to one out of three predetrmined position
+    public void teleport(Orientation orientation)
+    {
+        boss.transform.position = orientationDictionary[orientation].position;  //Position
+        boss.transform.rotation = orientationDictionary[orientation].rotation;  //Rotation
 
+        //Update stats
+        Debug.Log(orientation);
+        bossStats.setOrientation(orientation);
+    }
 
 }

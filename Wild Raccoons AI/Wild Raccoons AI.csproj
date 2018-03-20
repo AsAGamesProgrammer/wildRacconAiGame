@@ -81,6 +81,7 @@
     <Compile Include="Assets\Development\Decision Making\Scripts\AttackManager.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\BossAttacks.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\BulletScript.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Stats.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\Gameplay\Ability_ArcaneShot.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\Gameplay\Ability_Base.cs" />
     <Compile Include="Assets\Development\Pathfinding\Scripts\Gameplay\Ability_Teleport.cs" />

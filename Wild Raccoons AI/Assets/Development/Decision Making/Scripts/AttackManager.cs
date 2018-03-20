@@ -6,12 +6,14 @@ public class AttackManager : MonoBehaviour {
 
     //Script
     BossAttacks attackList;
+    Stats bossStats;
 
 	// Use this for initialization
 	void Start ()
     {
         //Getting script information
         attackList = GetComponent<BossAttacks>();
+        bossStats = GetComponent<Stats>();
 
         //Shoot at the beginning of the round
         attackList.shootAt(new Vector3(1f, 0, 0.3f));
@@ -28,6 +30,23 @@ public class AttackManager : MonoBehaviour {
             attackList.shootAt(new Vector3(1f, 0, 0.5f));
             attackList.shootAt(new Vector3(1f, 0, 0));
             attackList.shootAt(new Vector3(1f, 0, -0.5f));
+
+            //Teleport
+            switch(bossStats.getOrientation())
+            {
+                case Orientation.Left:
+                    attackList.teleport(Orientation.Top);
+                    break;
+
+                case Orientation.Top:
+                    attackList.teleport(Orientation.Right);
+                    break;
+
+                case Orientation.Right:
+                    attackList.teleport(Orientation.Left);
+                    break;
+            }
+
         }
 	}
 }
