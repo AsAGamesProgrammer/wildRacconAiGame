@@ -14,8 +14,8 @@ public class AttackManager : MonoBehaviour {
         attackList = GetComponent<BossAttacks>();
 
         //Shoot at the beginning of the round
-        attackList.shootAt(new Vector3(-0.3f, 0, -1));
-        attackList.shootAt(new Vector3(0.3f, 0, -1));
+        attackList.shootAt(new Vector3(1f, 0, 0.3f));
+        attackList.shootAt(new Vector3(1f, 0, -0.3f));
     }
 	
 	// Update is called once per frame
@@ -25,9 +25,9 @@ public class AttackManager : MonoBehaviour {
         if(attackList.performMeleeAttack())
         {
             //Shoot three times at the end of the attack
-            attackList.shootAt(new Vector3(0f, 0, -1));
-            attackList.shootAt(new Vector3(0.5f, 0, -1));
-            attackList.shootAt(new Vector3(-0.5f, 0, -1));
+            attackList.shootAt(new Vector3(1f, 0, 0.5f));
+            attackList.shootAt(new Vector3(1f, 0, 0));
+            attackList.shootAt(new Vector3(1f, 0, -0.5f));
         }
 	}
 }
