@@ -7,6 +7,11 @@ public class Stats : MonoBehaviour {
     float health = 100;
     public Orientation orientation = Orientation.Top;
     public bool pShieldEnabled = false;
+
+    //Phases
+    public int phase = 0;
+    int firstPhaseHealth = 60;
+    int secondPhaseHealth = 20;
     
     //ORIENTATION
     public Orientation getOrientation()
@@ -17,6 +22,33 @@ public class Stats : MonoBehaviour {
     public void setOrientation(Orientation newOrientation)
     {
         orientation = newOrientation;
+    }
+
+    //HEALTH
+    public void TakePDamage (float amount)
+    {
+        if (!pShieldEnabled)
+        {
+            health -= amount;
+            //************TODO***********
+            //Health bar
+
+            //Phases
+            if (health < firstPhaseHealth)
+                phase = 1;
+
+            if (health < secondPhaseHealth)
+                phase = 2;
+
+        }
+
+        if (health <=0)
+        {
+            //************TODO***********
+            //Game over
+        }
+
+
     }
 
 }
