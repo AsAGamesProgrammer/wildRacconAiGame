@@ -11,10 +11,17 @@ public class Stats : MonoBehaviour {
 
     //Phases
     public Slider healthBar;
+    public Image fillColour;
     public int phase = 0;
     int firstPhaseHealth = 600;
     int secondPhaseHealth = 200;
-    
+
+    //START
+    private void Start()
+    {
+        fillColour.color = Color.green;
+    }
+
     //ORIENTATION
     public Orientation getOrientation()
     {
@@ -31,15 +38,14 @@ public class Stats : MonoBehaviour {
     {
         if (!pShieldEnabled)
         {
+            //Reduce health
             health -= amount;
+
+            //Display on the health bar
             healthBar.value = health;
 
-            //Phases
-            if (health < firstPhaseHealth)
-                phase = 1;
-
-            if (health < secondPhaseHealth)
-                phase = 2;
+            //Check phases
+            CheckPhases();
 
         }
 
@@ -47,6 +53,23 @@ public class Stats : MonoBehaviour {
         {
             //************TODO***********
             //Game over
+        }
+    }
+
+    //PHASES
+    public void CheckPhases()
+    {
+        //Phases
+        if (health < firstPhaseHealth)
+        {
+            phase = 1;
+            fillColour.color = Color.yellow;
+        }
+
+        if (health < secondPhaseHealth)
+        {
+            phase = 2;
+            fillColour.color = Color.red;
         }
 
 
