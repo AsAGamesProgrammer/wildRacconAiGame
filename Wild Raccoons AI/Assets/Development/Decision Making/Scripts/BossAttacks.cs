@@ -110,18 +110,14 @@ public class BossAttacks : MonoBehaviour {
     {
         prepareMeleeAttack();
 
-        Debug.Log("Instantiate");
-
         if (meleeAttack.transform.localScale.x < meleeAttackRadius)
         {
-            Debug.Log(meleeAttack.transform.localScale.x);
             meleeAttack.transform.localScale += sphereGrowthVector;
             return false;
         }
         else
         {
             Destroy(meleeAttack);
-            Debug.Log("Destoryed");
             attackPrepared = false;
             return true;
         }
@@ -144,7 +140,6 @@ public class BossAttacks : MonoBehaviour {
         boss.transform.rotation = orientationDictionary[orientation].rotation;  //Rotation
 
         //Update stats
-        Debug.Log(orientation);
         bossStats.setOrientation(orientation);
     }
 
