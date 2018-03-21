@@ -23,7 +23,7 @@ public class AttackManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        attackList.applyPhysicalShield();           //shield
+        //attackList.applyPhysicalShield();           //shield
 
         if (!bossStats.pShieldEnabled)              //if shield is not up
         {
@@ -48,6 +48,9 @@ public class AttackManager : MonoBehaviour {
 
                     case Orientation.Right:
                         attackList.teleport(Orientation.Left);
+
+                        //TEST
+                        bossStats.TakePDamage(100);
                         break;
                 }
             }

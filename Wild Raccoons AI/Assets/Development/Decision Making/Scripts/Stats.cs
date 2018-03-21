@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Stats : MonoBehaviour {
 
-    float health = 100;
+    float health = 1000;
     public Orientation orientation = Orientation.Top;
     public bool pShieldEnabled = false;
 
     //Phases
+    public Slider healthBar;
     public int phase = 0;
-    int firstPhaseHealth = 60;
-    int secondPhaseHealth = 20;
+    int firstPhaseHealth = 600;
+    int secondPhaseHealth = 200;
     
     //ORIENTATION
     public Orientation getOrientation()
@@ -30,8 +32,7 @@ public class Stats : MonoBehaviour {
         if (!pShieldEnabled)
         {
             health -= amount;
-            //************TODO***********
-            //Health bar
+            healthBar.value = health;
 
             //Phases
             if (health < firstPhaseHealth)
