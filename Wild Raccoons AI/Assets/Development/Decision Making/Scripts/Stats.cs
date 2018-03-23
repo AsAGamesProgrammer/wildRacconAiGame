@@ -16,6 +16,9 @@ public class Stats : MonoBehaviour {
     int firstPhaseHealth = 600;
     int secondPhaseHealth = 200;
 
+    //Death
+    public bool isDead = false;
+
     //START
     private void Start()
     {
@@ -53,6 +56,7 @@ public class Stats : MonoBehaviour {
         {
             //************TODO***********
             //Game over
+            isDead = true;
         }
     }
 
