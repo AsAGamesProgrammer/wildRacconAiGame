@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PF_Unit : MonoBehaviour
+public class PF_Enemy : MonoBehaviour
 {
-    public Transform target;
+    private GameObject target;
 
     public float movespeed = 25f;
     public float turnSpeed = 3f;
     public float turnDistance = 5f;
+
+    public float chaseTimer = 3f;
 
     public PF_Path path;
 
@@ -18,6 +20,24 @@ public class PF_Unit : MonoBehaviour
     private bool targetSet = false;
     private bool targetReached = false;
 
+    public GameObject healthPickup;
+    public GameObject manaPickup;
+    public GameObject speedPickup;
+
+    public GameObject explosionHitbox;
+    public ParticleSystem particleSystem;
+
+    private bool hasExploded = false;
+
+    private void Start()
+    {
+        target = GameObject.FindGameObjectWithTag("Player");
+
+        Invoke("SelfDestruct", chaseTimer);
+
+        PF_AlgorithmManager.RequestPath(transform.position, target.transform.position, OnPathFound);
+    }
+
     private void Update()
     {
         if (newPathCooldown > 0f)
@@ -25,22 +45,12 @@ public class PF_Unit : MonoBehaviour
             newPathCooldownRemaining -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            PF_AlgorithmManager.RequestPath(transform.position, target.position, OnPathFound);
-
-            targetSet = true;
-            targetReached = false;
-        }
-
+        // Update the path. (Dynamic)
         if (newPathCooldownRemaining <= 0f)
         {
-            if (targetSet && !targetReached)
-            {
-                PF_AlgorithmManager.RequestPath(transform.position, target.position, OnPathFound);
+            PF_AlgorithmManager.RequestPath(transform.position, target.transform.position, OnPathFound);
 
-                newPathCooldownRemaining = newPathCooldown;
-            }
+            newPathCooldownRemaining = newPathCooldown;
         }
     }
 
@@ -71,16 +81,12 @@ public class PF_Unit : MonoBehaviour
             {
                 Vector2 pos2D = new Vector2(transform.position.x, transform.position.z);
 
-                // 
                 while (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
                 {
                     // Break out of the while loop if the path is finished.
                     if (pathIndex == path.finishLineIndex)
                     {
                         followingPath = false;
-
-                        targetSet = false;
-                        targetReached = true;
 
                         break;
                     }
@@ -108,11 +114,43 @@ public class PF_Unit : MonoBehaviour
                 yield return null;
             }
         }
-        else
+    }
+
+    private void SelfDestruct()
+    {
+        if(!hasExploded)
         {
-            targetSet = false;
-            targetReached = true;
+            particleSystem.Play();
+
+            explosionHitbox.SetActive(true);
+
+            StopCoroutine("FollowPath");
+            newPathCooldownRemaining = 999f;
+
+            Invoke("DestroySelf", 1f);
+
+            hasExploded = true;
         }
+    }
+
+    private void DestroySelf()
+    {
+        float pickupType = Random.value;
+
+        if(pickupType <= 0.25f)
+        {
+            Instantiate(healthPickup, transform.position, Quaternion.identity);
+        }
+        else if (pickupType > 0.25f && pickupType <= 0.5f)
+        {
+            Instantiate(manaPickup, transform.position, Quaternion.identity);
+        }
+        else if (pickupType > 0.5f && pickupType <= 0.75f)
+        {
+            Instantiate(speedPickup, transform.position, Quaternion.identity);
+        }
+
+        Destroy(gameObject);
     }
 
     public void OnDrawGizmos()
@@ -120,6 +158,16 @@ public class PF_Unit : MonoBehaviour
         if(path != null)
         {
             path.DrawWithGizmos();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            Debug.Log("wew");
+
+            SelfDestruct();
         }
     }
 }

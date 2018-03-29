@@ -10,6 +10,13 @@ public class BossAttacks : MonoBehaviour {
     //Boss
     public GameObject boss;
 
+    // Boss Hand Scripts
+    public HandController leftHandController;
+    public HandController rightHandController;
+
+    // Player Reference
+    public GameObject player;
+
     //Scripts
     Stats bossStats;
 
@@ -66,12 +73,14 @@ public class BossAttacks : MonoBehaviour {
                     break;
             }
         }
+
+        leftHandController.CreateIndicator(player.transform.position);
     }
 
     //UPDATE
     private void Update()
     {
-        //If a chield is on
+        //If a shield is on
         if(shieldEnabled)
         {
             //Decrease time
