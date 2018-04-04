@@ -198,6 +198,11 @@ public class PF_Player : MonoBehaviour
         currentHealth = newHealthValue_;
     }
 
+    bool CheckIfNegitive(float modifyValue_)
+    {
+        return modifyValue_ < 0;
+    }
+
     public void ModifyCurrentHealth(float modifyValue_)
     {
         if (CheckIfNegitive(modifyValue_) && invulnerable)
