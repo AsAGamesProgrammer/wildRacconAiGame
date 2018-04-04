@@ -44,7 +44,17 @@ public class PF_Player : MonoBehaviour
     public Slider manaSlider;
     public Text manaText;
 
-    private void Awake()
+    public PlayerAbilities ActivePower = PlayerAbilities.Arcane;
+
+    public enum PlayerAbilities
+    {
+        Physical,
+        Arcane,
+        Teleport,
+        Shield
+    };
+
+  private void Awake()
     {
         rangeIndicator = GameObject.FindGameObjectWithTag("Range Indicator");
 
@@ -54,11 +64,21 @@ public class PF_Player : MonoBehaviour
         currentMana = 40f;
     }
 
+    private void ManaUpdate()
+    {
+        if (currentMana < 0)
+            ModifyCurrentMana(0);
+        if (currentMana < maxMana)
+            ModifyCurrentMana(currentManaRegen);
+    }
+
     private void Update()
     {
         clickCooldown -= Time.deltaTime;
 
         RefreshUI();
+
+        ManaUpdate();
 
         newPathCooldownRemaining -= Time.deltaTime;
 
