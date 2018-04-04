@@ -17,7 +17,7 @@ public class BossAttacks : MonoBehaviour {
     //ATTACKS
     public MeleeAttack meleeAttackScript;      //Melee
     public Shield shieldScript;                //Shield
-
+    public BulletPattern bulletPattern;
 
     // Player Reference
     public GameObject player;
@@ -58,6 +58,8 @@ public class BossAttacks : MonoBehaviour {
     {
         //Get scripts
         bossStats = GetComponent<Stats>();
+        //Bullet pattern
+        bulletPattern = GameObject.FindGameObjectWithTag("BossAbilities").GetComponent<BulletPattern>();
 
         //Populate dictionary
         GameObject[] positions = GameObject.FindGameObjectsWithTag("Orientation");
@@ -96,10 +98,14 @@ public class BossAttacks : MonoBehaviour {
 
     //SHOOT
     //Creates a bullet with given direction, speed and maximum distance from the boss
-    public void shootAt(Vector3 direction)
+    public void shootThree()
     {
-        GameObject newBullet = Instantiate(bulletPrefab, boss.transform);
-        newBullet.GetComponent<BulletScript>().direction = direction;
+        bulletPattern.ShootThreeBullets();
+    }
+
+    public void shootFive()
+    {
+        bulletPattern.ShootFiveBullets();
     }
 
 

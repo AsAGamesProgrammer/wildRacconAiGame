@@ -117,16 +117,22 @@ public class AttackManager : MonoBehaviour {
                     break;
 
                 //MIDDLE
-                //case (Zones.Middle):
-                //    //Shoot
-                //    if (pastBossActions[pastBossActions.Count - 1] != BossActions.SpawnEnemies)
-                //    {
-                //        Debug.Log("Spawn Enemies Left");
-                //        attackList.spawnEnemiesRight();
-                //        pastBossActions.Add(BossActions.SpawnEnemies);
+                case (Zones.Middle):
+                    //Shoot
+                    if (pastBossActions[pastBossActions.Count - 1] != BossActions.ShootThree)
+                    {
+                        Debug.Log("Three shots");
+                        attackList.shootThree();
+                        pastBossActions.Add(BossActions.ShootThree);
 
-                //    }
-                //    break;
+                    }
+                    else
+                    {
+                        Debug.Log("Five shots");
+                        attackList.shootFive();
+                        pastBossActions.Add(BossActions.ShootFive);
+                    }
+                    break;
 
                 default:
                     NextAttack = true;
@@ -193,7 +199,8 @@ public enum BossActions
     Minions,
     PShield,
     MShield,
-    Shoot,
+    ShootThree,
+    ShootFive,
     None,
     LeftHand,
     RightHand,

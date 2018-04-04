@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour {
 
+    //Script
+    BulletPattern bulletPattern;
+
     //Boss
     GameObject Boss;
 
@@ -29,6 +32,9 @@ public class BulletScript : MonoBehaviour {
     {
         //Boss
         Boss = GameObject.FindGameObjectWithTag("Boss");
+
+        //Bullet pattern
+        bulletPattern = GameObject.FindGameObjectWithTag("BossAbilities").GetComponent<BulletPattern>();
 
         //Player
         GameObject[] playerTagged = GameObject.FindGameObjectsWithTag("Player");
@@ -56,7 +62,12 @@ public class BulletScript : MonoBehaviour {
         transform.Translate(direction * speed * Time.deltaTime);
 
         if (Vector3.Distance(this.transform.position, Boss.transform.position) > maxBossDistance)
+        {
+            //Send msg to bullet pattern
+            bulletPattern.destroyedBullets++;
+
             Destroy(this.gameObject);
+        }
 	}
 
     //DO DAMAGE
@@ -65,6 +76,10 @@ public class BulletScript : MonoBehaviour {
         if(other.gameObject == playerModel)
         {
             playerScript.ModifyCurrentHealth(damage * -1);
+
+            //Send msg to bullet pattern
+            bulletPattern.destroyedBullets++;
+
             Destroy(this.gameObject);
         }
     }
