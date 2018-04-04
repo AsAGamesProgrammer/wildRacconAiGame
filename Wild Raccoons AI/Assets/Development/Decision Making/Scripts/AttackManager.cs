@@ -7,6 +7,7 @@ public class AttackManager : MonoBehaviour {
     //Script
     BossAttacks attackList;
     Stats bossStats;
+    PF_Player playerScript;
 
     //Player
     public GameObject playerModel;
@@ -21,12 +22,16 @@ public class AttackManager : MonoBehaviour {
     //List of attacks
     List<BossActions> pastBossActions = new List<BossActions>();
 
+    //Other
+    public int averageManaCost = 20; //Average price for mana ability, used to select shields
+
 	// Use this for initialization
 	void Start ()
     {
         //Getting script information
         attackList = GetComponent<BossAttacks>();
         bossStats = GetComponent<Stats>();
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PF_Player>();
 
         //Adding initial past action
         pastBossActions.Add(BossActions.None);
@@ -59,12 +64,20 @@ public class AttackManager : MonoBehaviour {
                         pastBossActions.Add(BossActions.Melee);
                     }
                     else //else put shield
-                    {
-                        //Magical shield
-                        Debug.Log("Magical shield");
-                        attackList.applyMagicalShield();
-                        pastBossActions.Add(BossActions.MShield);
-                    }
+                        if(playerScript.GetCurrentMana() < averageManaCost) 
+                        {
+                            //Physycal shield if player has no mana 
+                            Debug.Log("Physycal shield");
+                            attackList.applyPhysicalShield();
+                            pastBossActions.Add(BossActions.PShield);
+                        }
+                        else
+                        {
+                            //Magical shield if player has mana
+                            Debug.Log("Magical shield");
+                            attackList.applyMagicalShield();
+                            pastBossActions.Add(BossActions.MShield);
+                        }
                     break;
 
 

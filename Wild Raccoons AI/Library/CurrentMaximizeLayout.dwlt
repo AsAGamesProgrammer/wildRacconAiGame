@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 492}
   m_MaxSize: {x: 18008, y: 14042}
   vertical: 0
-  controlID: 586
+  controlID: 1117
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 442}
   m_MaxSize: {x: 4002, y: 8042}
   vertical: 1
-  controlID: 587
+  controlID: 1118
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -177,14 +177,14 @@ MonoBehaviour:
     width: 846
     height: 469
   m_SceneLighting: 1
-  lastFramingTime: 5154.5850231131135
+  lastFramingTime: 1695.0873774862746
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -50.833717, y: 4.059087, z: 0.24924207}
+    m_Target: {x: 0, y: 0, z: 0}
     speed: 2
-    m_Value: {x: -50.833717, y: 4.059087, z: 0.24924207}
+    m_Value: {x: 0, y: 0, z: 0}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -207,13 +207,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.09646192, y: 0.5825429, z: -0.0698896, w: -0.80402386}
+    m_Target: {x: -0.15603963, y: 0.2360538, z: -0.038433854, w: -0.9583596}
     speed: 2
-    m_Value: {x: -0.09646192, y: 0.58254296, z: -0.069889605, w: -0.80402386}
+    m_Value: {x: -0.15603963, y: 0.23605381, z: -0.038433854, w: -0.9583596}
   m_Size:
-    m_Target: 16.901085
+    m_Target: 5.087039
     speed: 2
-    m_Value: 16.901085
+    m_Value: 5.087039
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 492}
   m_MaxSize: {x: 10004, y: 14042}
   vertical: 1
-  controlID: 532
+  controlID: 1039
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -327,9 +327,9 @@ MonoBehaviour:
     height: 408
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 32dcffff
-    m_LastClickedID: -9166
-    m_ExpandedIDs: e4fbffff000000001e270000
+    m_SelectedIDs: 10270000
+    m_LastClickedID: 10000
+    m_ExpandedIDs: e4fbffff000000003a270000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -440,19 +440,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Development/Decision Making/Prefabs/Attacks
+    - Assets/Development/Pathfinding/Scripts
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Development/Decision Making/Prefabs/Attacks
+  - Assets/Development/Pathfinding/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\University\AI\wildRacconAiGame\Wild Raccoons AI
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 7e250000
-    m_LastClickedID: 9598
-    m_ExpandedIDs: 00000000e624000028250000502500006e2500009c250000a2250000aa250000bc250000e8250000ffffff7f
+    m_SelectedIDs: a6250000
+    m_LastClickedID: 9638
+    m_ExpandedIDs: 00000000ec2400002e2500005825000076250000a6250000ac250000b4250000c6250000f4250000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -480,7 +480,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000e624000028250000502500006e2500009c250000a2250000aa250000bc250000e8250000ffffff7f
+    m_ExpandedIDs: 00000000ec2400002e2500005825000076250000a6250000ac250000b4250000c6250000f4250000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -505,9 +505,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 32dcffff
-    m_LastClickedInstanceID: -9166
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 10270000
+    m_LastClickedInstanceID: 10000
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
       m_UserAcceptedRename: 0
