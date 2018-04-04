@@ -13,6 +13,9 @@ public class PF_Player : MonoBehaviour
     private float maxMana = 100f;
     private float currentManaRegen = 5f;
 
+    private int Invulnerability = 2;
+    private bool invulnerable;
+
     private float baseMovespeed = 20f;
     private float currentMovespeed = 20f;
 
@@ -194,18 +197,30 @@ public class PF_Player : MonoBehaviour
     {
         currentHealth = newHealthValue_;
     }
+
     public void ModifyCurrentHealth(float modifyValue_)
     {
+        if (CheckIfNegitive(modifyValue_) && invulnerable)
+            return;
         currentHealth += modifyValue_;
+        if (CheckIfNegitive(modifyValue_))
+            StartCoroutine(InvulnerabilityTimer());
 
         // Check if the value is greater than the max health value.
-        if(currentHealth > maxHealth)
+        if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
     }
 
-    // Max Health
+    private IEnumerator InvulnerabilityTimer()
+    {
+        invulnerable = true;
+        yield return new WaitForSeconds(Invulnerability);
+        invulnerable = false;
+    }
+
+  // Max Health
     public float GetMaxHealth()
     {
         return maxHealth;
