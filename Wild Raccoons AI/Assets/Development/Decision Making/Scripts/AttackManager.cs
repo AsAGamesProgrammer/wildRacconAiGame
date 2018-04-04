@@ -14,6 +14,9 @@ public class AttackManager : MonoBehaviour {
     //Current zone
     public Zones currentPlayerZone;
 
+    //Next attack
+    public bool NextAttack = true;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -22,13 +25,28 @@ public class AttackManager : MonoBehaviour {
         bossStats = GetComponent<Stats>();
 
         //Shoot at the beginning of the round
-        attackList.shootAt(new Vector3(1f, 0, 0.3f));
-        attackList.shootAt(new Vector3(1f, 0, -0.3f));
+        //attackList.shootAt(new Vector3(1f, 0, 0.3f));
+        //attackList.shootAt(new Vector3(1f, 0, -0.3f));
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        Debug.Log("Is ready to attack " + NextAttack + " aiming for " + currentPlayerZone);
+
+        //STATE MACHINE
+        if (NextAttack)
+        {
+            if (currentPlayerZone == Zones.Melee)
+            {
+                Debug.Log("Attacking melee");
+                NextAttack = false;         //Attack performed
+                attackList.AttackMelee();
+            }
+        }
+
+
+
 
         //attackList.applyPhysicalShield();           //shield
 

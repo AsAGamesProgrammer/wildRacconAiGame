@@ -14,17 +14,20 @@ public class BossAttacks : MonoBehaviour {
     public HandController leftHandController;
     public HandController rightHandController;
 
+    //Melee
+    public MeleeAttack meleeAttackScript;
+
     // Player Reference
     public GameObject player;
 
     //Scripts
     Stats bossStats;
 
-    //Melee attack
-    public float meleeAttackRadius = 10;
-    public Vector3 sphereGrowthVector = new Vector3(0.01f, 0.01f, 0.01f);
-    public GameObject explosionSpherePrefab;    //prefab
-    GameObject meleeAttack;     //Object
+    ////Melee attack
+    //public float meleeAttackRadius = 10;
+    //public Vector3 sphereGrowthVector = new Vector3(0.01f, 0.01f, 0.01f);
+    //public GameObject explosionSpherePrefab;    //prefab
+    //GameObject meleeAttack;     //Object
 
     //Shooting
     public GameObject bulletPrefab;
@@ -105,31 +108,37 @@ public class BossAttacks : MonoBehaviour {
     //Grow a circle until reaches maximum diameter
     //Do damage inside the circle
 
-    void prepareMeleeAttack()
-    {
-        if (!attackPrepared)
-        {
-            meleeAttack = Instantiate(explosionSpherePrefab, boss.transform);
-            attackPrepared = true;
-        }
-    }
+    //void prepareMeleeAttack()
+    //{
+    //    if (!attackPrepared)
+    //    {
+    //        meleeAttack = Instantiate(explosionSpherePrefab, boss.transform);
+    //        attackPrepared = true;
+    //    }
+    //}
 
-    //Returns true when finished
-    public bool performMeleeAttack()
-    {
-        prepareMeleeAttack();
+    ////Returns true when finished
+    //public bool performMeleeAttack()
+    //{
+    //    prepareMeleeAttack();
 
-        if (meleeAttack.transform.localScale.x < meleeAttackRadius)
-        {
-            meleeAttack.transform.localScale += sphereGrowthVector;
-            return false;
-        }
-        else
-        {
-            Destroy(meleeAttack);
-            attackPrepared = false;
-            return true;
-        }
+    //    if (meleeAttack.transform.localScale.x < meleeAttackRadius)
+    //    {
+    //        meleeAttack.transform.localScale += sphereGrowthVector;
+    //        return false;
+    //    }
+    //    else
+    //    {
+    //        Destroy(meleeAttack);
+    //        attackPrepared = false;
+    //        return true;
+    //    }
+    //}
+
+    //MELEE
+    public void AttackMelee()
+    {
+        meleeAttackScript.performMeleeAttack();
     }
 
     //SHOOT
