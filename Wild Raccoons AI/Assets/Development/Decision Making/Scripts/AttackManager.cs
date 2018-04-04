@@ -98,6 +98,36 @@ public class AttackManager : MonoBehaviour {
                     }
                     break;
 
+                //RIGHT
+                case (Zones.Right):
+                    //If the last attack was not spawning enemies
+                    if (pastBossActions[pastBossActions.Count - 1] != BossActions.SpawnEnemies)
+                    {
+                        Debug.Log("Spawn Enemies Left");
+                        attackList.spawnEnemiesRight();
+                        pastBossActions.Add(BossActions.SpawnEnemies);
+
+                    }
+                    else //otherwise teleport
+                    {
+                        Debug.Log("Teleport");
+                        TeleportHelper();
+                        pastBossActions.Add(BossActions.Teleport);
+                    }
+                    break;
+
+                //MIDDLE
+                //case (Zones.Middle):
+                //    //Shoot
+                //    if (pastBossActions[pastBossActions.Count - 1] != BossActions.SpawnEnemies)
+                //    {
+                //        Debug.Log("Spawn Enemies Left");
+                //        attackList.spawnEnemiesRight();
+                //        pastBossActions.Add(BossActions.SpawnEnemies);
+
+                //    }
+                //    break;
+
                 default:
                     NextAttack = true;
                     break;
@@ -116,25 +146,6 @@ public class AttackManager : MonoBehaviour {
             //        attackList.shootAt(new Vector3(1f, 0, 0.5f));
             //        attackList.shootAt(new Vector3(1f, 0, 0));
             //        attackList.shootAt(new Vector3(1f, 0, -0.5f));
-
-            //        //Teleport
-            //        switch (bossStats.getOrientation())
-            //        {
-            //            case Orientation.Left:
-            //                attackList.teleport(Orientation.Top);
-            //                break;
-
-            //            case Orientation.Top:
-            //                attackList.teleport(Orientation.Right);
-            //                break;
-
-            //            case Orientation.Right:
-            //                attackList.teleport(Orientation.Left);
-
-            //                //TEST
-            //                bossStats.TakePDamage(100);
-            //                break;
-            //        }
             //    }
             //}
         }

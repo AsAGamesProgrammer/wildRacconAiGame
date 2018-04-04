@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Assets\Development\Decision Making\Scripts\AttackManager.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\BossAttacks.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\BulletPattern.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\BulletScript.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\MeleeAttack.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\PhysicalShield.cs" />
