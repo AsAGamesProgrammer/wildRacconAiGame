@@ -7,7 +7,9 @@ public class Stats : MonoBehaviour {
 
     float health = 1000;
     public Orientation orientation = Orientation.Top;
-    public bool pShieldEnabled = false;
+
+    bool pShieldEnabled = false;
+    bool mShieldEnabled = false;
 
     //Phases
     public Slider healthBar;
@@ -36,7 +38,7 @@ public class Stats : MonoBehaviour {
         orientation = newOrientation;
     }
 
-    //HEALTH
+    //PHYSYCAL DMG
     public void TakePDamage (float amount)
     {
         if (!pShieldEnabled)
@@ -57,8 +59,36 @@ public class Stats : MonoBehaviour {
             //************TODO***********
             //Game over
             isDead = true;
+            Debug.Log("I AM DEAD!!!");
         }
     }
+
+    //MAGICAL DMG
+    public void TakeMDamage(float amount)
+    {
+        if (!mShieldEnabled)
+        {
+            //Reduce health
+            health -= amount;
+
+            //Display on the health bar
+            healthBar.value = health;
+
+            //Check phases
+            CheckPhases();
+
+        }
+
+        if (health <= 0)
+        {
+            //************TODO***********
+            //Game over
+            isDead = true;
+        }
+
+        Debug.Log("I AM DEAD!!!");
+    }
+
 
     //PHASES
     public void CheckPhases()
@@ -77,6 +107,24 @@ public class Stats : MonoBehaviour {
         }
 
 
+    }
+
+    //APPLY SHIELD
+    public void applyShield(shieldType type, bool toApply)
+    {
+        switch (type)
+        {
+            case shieldType.Magical:
+                mShieldEnabled = toApply;
+                break;
+
+            case shieldType.Physycal:
+                pShieldEnabled = toApply;
+                break;
+
+            default:
+                break;
+        }
     }
 
 }

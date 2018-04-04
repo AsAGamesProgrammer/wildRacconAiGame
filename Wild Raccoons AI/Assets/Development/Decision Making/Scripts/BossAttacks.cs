@@ -14,8 +14,10 @@ public class BossAttacks : MonoBehaviour {
     public HandController leftHandController;
     public HandController rightHandController;
 
-    //Melee
-    public MeleeAttack meleeAttackScript;
+    //ATTACKS
+    public MeleeAttack meleeAttackScript;      //Melee
+    public Shield shieldScript;                //Shield
+
 
     // Player Reference
     public GameObject player;
@@ -83,57 +85,8 @@ public class BossAttacks : MonoBehaviour {
     //UPDATE
     private void Update()
     {
-        //If a shield is on
-        if(shieldEnabled)
-        {
-            //Decrease time
-            currentTime -= Time.deltaTime;
-            var material = physicalShield.GetComponent<Renderer>().material;
-            var color = material.color;
 
-            material.color = new Color(color.r, color.g, color.b, color.a - (fadePerSecond * Time.deltaTime));
-
-            //When time is out
-            if (currentTime <=0)
-            {
-                Destroy(physicalShield);        //Destroy a shield
-                shieldEnabled = false;          //Set flag to false
-                bossStats.pShieldEnabled = false;
-            }
-        }
     }
-
-    //MELEE ATTACK 1
-    //Create a circle around the boss
-    //Grow a circle until reaches maximum diameter
-    //Do damage inside the circle
-
-    //void prepareMeleeAttack()
-    //{
-    //    if (!attackPrepared)
-    //    {
-    //        meleeAttack = Instantiate(explosionSpherePrefab, boss.transform);
-    //        attackPrepared = true;
-    //    }
-    //}
-
-    ////Returns true when finished
-    //public bool performMeleeAttack()
-    //{
-    //    prepareMeleeAttack();
-
-    //    if (meleeAttack.transform.localScale.x < meleeAttackRadius)
-    //    {
-    //        meleeAttack.transform.localScale += sphereGrowthVector;
-    //        return false;
-    //    }
-    //    else
-    //    {
-    //        Destroy(meleeAttack);
-    //        attackPrepared = false;
-    //        return true;
-    //    }
-    //}
 
     //MELEE
     public void AttackMelee()
@@ -165,17 +118,12 @@ public class BossAttacks : MonoBehaviour {
     //Apply physical shield
     public void applyPhysicalShield()
     {
-        if(!shieldEnabled)
-        {
-            //Instantiate
-            physicalShield = Instantiate(physicalShieldPrefab, boss.transform);
+        shieldScript.applyShield(shieldType.Physycal);
+    }
 
-            //Set flag
-            shieldEnabled = true;
-            bossStats.pShieldEnabled = true;
-
-            //Set time
-            currentTime = maxShieldTime;
-        }
+    //Magical
+    public void applyMagicalShield()
+    {
+        shieldScript.applyShield(shieldType.Magical);
     }
 }

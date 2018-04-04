@@ -60,7 +60,10 @@ public class AttackManager : MonoBehaviour {
                     }
                     else //else put shield
                     {
-
+                        //Magical shield
+                        Debug.Log("Magical shield");
+                        attackList.applyMagicalShield();
+                        pastBossActions.Add(BossActions.MShield);
                     }
                     break;
 
