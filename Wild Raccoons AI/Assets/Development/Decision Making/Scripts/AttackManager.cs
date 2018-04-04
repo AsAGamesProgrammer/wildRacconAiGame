@@ -10,7 +10,7 @@ public class AttackManager : MonoBehaviour {
     PF_Player playerScript;
 
     //Player
-    public GameObject playerModel;
+    //public GameObject playerModel;
 
     //Current zone
     public Zones currentPlayerZone;
@@ -54,7 +54,7 @@ public class AttackManager : MonoBehaviour {
 
             switch(currentPlayerZone)
             {
-                //Player in Melee zone
+                //MIDDLE
                 case (Zones.Melee):
                     //If the last attack was NOT melee attack melee
                     if (pastBossActions[pastBossActions.Count-1] != BossActions.Melee)
@@ -80,6 +80,23 @@ public class AttackManager : MonoBehaviour {
                         }
                     break;
 
+                //LEFT
+                case (Zones.Left):
+                    //If the last attack was not spawning enemies
+                    if (pastBossActions[pastBossActions.Count - 1] != BossActions.SpawnEnemies)
+                    {
+                        Debug.Log("Spawn Enemies Left");
+                        attackList.spawnEnemiesLeft();
+                        pastBossActions.Add(BossActions.SpawnEnemies);
+
+                    }
+                    else //otherwise teleport
+                    {
+                        Debug.Log("Teleport");
+                        TeleportHelper();
+                        pastBossActions.Add(BossActions.Teleport);
+                    }
+                    break;
 
                 default:
                     NextAttack = true;
@@ -88,41 +105,60 @@ public class AttackManager : MonoBehaviour {
 
         }
 
+            //attackList.applyPhysicalShield();           //shield
 
+            //if (!bossStats.pShieldEnabled)              //if shield is not up
+            //{
+            //    //Perform melee attack
+            //    if (attackList.performMeleeAttack())    //if aura ttack started
+            //    {
+            //        //Shoot three times at the end of the attack
+            //        attackList.shootAt(new Vector3(1f, 0, 0.5f));
+            //        attackList.shootAt(new Vector3(1f, 0, 0));
+            //        attackList.shootAt(new Vector3(1f, 0, -0.5f));
 
+            //        //Teleport
+            //        switch (bossStats.getOrientation())
+            //        {
+            //            case Orientation.Left:
+            //                attackList.teleport(Orientation.Top);
+            //                break;
 
-        //attackList.applyPhysicalShield();           //shield
+            //            case Orientation.Top:
+            //                attackList.teleport(Orientation.Right);
+            //                break;
 
-        //if (!bossStats.pShieldEnabled)              //if shield is not up
-        //{
-        //    //Perform melee attack
-        //    if (attackList.performMeleeAttack())    //if aura ttack started
-        //    {
-        //        //Shoot three times at the end of the attack
-        //        attackList.shootAt(new Vector3(1f, 0, 0.5f));
-        //        attackList.shootAt(new Vector3(1f, 0, 0));
-        //        attackList.shootAt(new Vector3(1f, 0, -0.5f));
+            //            case Orientation.Right:
+            //                attackList.teleport(Orientation.Left);
 
-        //        //Teleport
-        //        switch (bossStats.getOrientation())
-        //        {
-        //            case Orientation.Left:
-        //                attackList.teleport(Orientation.Top);
-        //                break;
+            //                //TEST
+            //                bossStats.TakePDamage(100);
+            //                break;
+            //        }
+            //    }
+            //}
+        }
 
-        //            case Orientation.Top:
-        //                attackList.teleport(Orientation.Right);
-        //                break;
+    //TELEPORT HELPER
+    void TeleportHelper()
+    {
+        switch (bossStats.getOrientation())
+        {
+            case Orientation.Left:
+                attackList.teleport(Orientation.Top);
+                NextAttack = true;
+                break;
 
-        //            case Orientation.Right:
-        //                attackList.teleport(Orientation.Left);
+            case Orientation.Top:
+                attackList.teleport(Orientation.Right);
+                NextAttack = true;
+                break;
 
-        //                //TEST
-        //                bossStats.TakePDamage(100);
-        //                break;
-        //        }
-        //    }
-        //}
+            case Orientation.Right:
+                attackList.teleport(Orientation.Left);
+                NextAttack = true;
+                break;
+        }
     }
 
 }
@@ -147,6 +183,10 @@ public enum BossActions
     PShield,
     MShield,
     Shoot,
-    None
+    None,
+    LeftHand,
+    RightHand,
+    SpawnEnemies,
+    Teleport
 }
 

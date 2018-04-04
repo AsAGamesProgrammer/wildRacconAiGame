@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 545}
+  m_MinSize: {x: 950, y: 492}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -43,7 +43,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
-  m_MinSize: {x: 950, y: 545}
+  m_MinSize: {x: 950, y: 492}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &3
 MonoBehaviour:
@@ -107,10 +107,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 713, y: 495}
+  m_MinSize: {x: 713, y: 442}
   m_MaxSize: {x: 18008, y: 14045}
   vertical: 0
-  controlID: 1260
+  controlID: 3186
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 442}
   m_MaxSize: {x: 4002, y: 8042}
   vertical: 1
-  controlID: 1261
+  controlID: 3187
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -205,10 +205,10 @@ MonoBehaviour:
     y: 0
     width: 546
     height: 947
-  m_MinSize: {x: 234, y: 495}
+  m_MinSize: {x: 234, y: 395}
   m_MaxSize: {x: 10004, y: 14045}
   vertical: 1
-  controlID: 1175
+  controlID: 3282
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -227,14 +227,14 @@ MonoBehaviour:
     y: 0
     width: 546
     height: 429
-  m_MinSize: {x: 202, y: 224}
+  m_MinSize: {x: 102, y: 124}
   m_MaxSize: {x: 4002, y: 4024}
-  m_ActualView: {fileID: 15}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 15}
   - {fileID: 16}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -388,14 +388,14 @@ MonoBehaviour:
     width: 846
     height: 469
   m_SceneLighting: 1
-  lastFramingTime: 1695.0873774862746
+  lastFramingTime: 1107.4629188696322
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0, y: 0, z: 0}
+    m_Target: {x: -8.551148, y: 0.89760405, z: -38.71232}
     speed: 2
-    m_Value: {x: 0, y: 0, z: 0}
+    m_Value: {x: -8.551148, y: 0.89760405, z: -38.71232}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -422,9 +422,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.15603963, y: 0.23605381, z: -0.038433854, w: -0.9583596}
   m_Size:
-    m_Target: 5.087039
+    m_Target: 5.347917
     speed: 2
-    m_Value: 5.087039
+    m_Value: 5.347917
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -463,9 +463,9 @@ MonoBehaviour:
     height: 408
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 10270000
-    m_LastClickedID: 10000
-    m_ExpandedIDs: e4fbffff000000003a270000
+    m_SelectedIDs: 04b6ffff
+    m_LastClickedID: -18940
+    m_ExpandedIDs: 62b8ffff1ae7ffffa2f3ffffe4fbffff0000000012280000ec280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -551,18 +551,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Development/Pathfinding/Scripts
+    - Assets/Development/Generic/Minor Enemy Assets
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Development/Pathfinding/Scripts
+  - Assets/Development/Generic/Minor Enemy Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\University\AI\wildRacconAiGame\Wild Raccoons AI
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: a6250000
-    m_LastClickedID: 9638
+    m_SelectedIDs: b4250000
+    m_LastClickedID: 9652
     m_ExpandedIDs: 00000000ec2400002e2500005825000076250000a6250000ac250000b4250000c6250000f4250000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0

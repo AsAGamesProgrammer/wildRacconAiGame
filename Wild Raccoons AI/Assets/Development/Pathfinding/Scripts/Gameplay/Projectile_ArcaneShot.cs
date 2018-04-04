@@ -7,8 +7,13 @@ public class Projectile_ArcaneShot : MonoBehaviour
     public float movespeed = 0f;
     public float lifeSpan = 999f;
 
-	// Update is called once per frame
-	void Update ()
+    private void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
         lifeSpan -= Time.deltaTime;
 

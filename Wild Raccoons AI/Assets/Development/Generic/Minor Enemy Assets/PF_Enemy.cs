@@ -29,6 +29,9 @@ public class PF_Enemy : MonoBehaviour
 
     private bool hasExploded = false;
 
+    //DECISION MAKING
+    AttackManager attackManagerScript;
+
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player");
@@ -36,6 +39,9 @@ public class PF_Enemy : MonoBehaviour
         Invoke("SelfDestruct", chaseTimer);
 
         PF_AlgorithmManager.RequestPath(transform.position, target.transform.position, OnPathFound);
+
+        //DECISION MAKING
+        attackManagerScript = GameObject.FindGameObjectWithTag("BossManager").GetComponent<AttackManager>();
     }
 
     private void Update()
@@ -150,6 +156,10 @@ public class PF_Enemy : MonoBehaviour
             Instantiate(speedPickup, transform.position, Quaternion.identity);
         }
 
+
+        //KRISTINA WAS HERE
+        attackManagerScript.NextAttack = true;
+
         Destroy(gameObject);
     }
 
@@ -166,6 +176,8 @@ public class PF_Enemy : MonoBehaviour
         if(other.tag == "Player")
         {
             Debug.Log("wew");
+
+            Debug.Log(attackManagerScript.NextAttack);
 
             SelfDestruct();
         }
