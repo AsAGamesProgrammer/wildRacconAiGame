@@ -13,9 +13,13 @@ public class AttackManager : MonoBehaviour {
 
     //Current zone
     public Zones currentPlayerZone;
+    private Zones previouslyAttackedZone;   //To check if player moves
 
     //Next attack
     public bool NextAttack = true;
+
+    //List of attacks
+    List<BossActions> pastBossActions = new List<BossActions>();
 
 	// Use this for initialization
 	void Start ()
@@ -23,6 +27,9 @@ public class AttackManager : MonoBehaviour {
         //Getting script information
         attackList = GetComponent<BossAttacks>();
         bossStats = GetComponent<Stats>();
+
+        //Adding initial past action
+        pastBossActions.Add(BossActions.None);
 
         //Shoot at the beginning of the round
         //attackList.shootAt(new Vector3(1f, 0, 0.3f));
@@ -37,12 +44,32 @@ public class AttackManager : MonoBehaviour {
         //STATE MACHINE
         if (NextAttack)
         {
-            if (currentPlayerZone == Zones.Melee)
+            NextAttack = false;         //Attack performed
+            previouslyAttackedZone = currentPlayerZone; //Remember location
+
+            switch(currentPlayerZone)
             {
-                Debug.Log("Attacking melee");
-                NextAttack = false;         //Attack performed
-                attackList.AttackMelee();
+                //Player in Melee zone
+                case (Zones.Melee):
+                    //If the last attack was NOT melee attack melee
+                    if (pastBossActions[pastBossActions.Count-1] != BossActions.Melee)
+                    {
+                        Debug.Log("Attacking melee");
+                        attackList.AttackMelee();
+                        pastBossActions.Add(BossActions.Melee);
+                    }
+                    else //else put shield
+                    {
+
+                    }
+                    break;
+
+
+                default:
+                    NextAttack = true;
+                    break;
             }
+
         }
 
 
@@ -84,7 +111,8 @@ public class AttackManager : MonoBehaviour {
 
 }
 
-//ENUM
+//------------------------ENUM--------------------------
+//Zones
 public enum Zones
 {
     Melee,
@@ -93,3 +121,16 @@ public enum Zones
     Middle,
     Back
 }
+
+
+//Attacks
+public enum BossActions
+{
+    Melee,
+    Minions,
+    PShield,
+    MShield,
+    Shoot,
+    None
+}
+

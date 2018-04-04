@@ -82,6 +82,7 @@
     <Compile Include="Assets\Development\Decision Making\Scripts\BossAttacks.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\BulletScript.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\MeleeAttack.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Shield.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\Stats.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\Zone.cs" />
     <Compile Include="Assets\Development\Generic\Boss Assets\HandController.cs" />
