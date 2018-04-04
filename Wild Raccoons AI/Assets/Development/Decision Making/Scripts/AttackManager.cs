@@ -8,6 +8,12 @@ public class AttackManager : MonoBehaviour {
     BossAttacks attackList;
     Stats bossStats;
 
+    //Player
+    public GameObject playerModel;
+
+    //Current zone
+    public Zones currentPlayerZone;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -23,37 +29,49 @@ public class AttackManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+
         //attackList.applyPhysicalShield();           //shield
 
-        if (!bossStats.pShieldEnabled)              //if shield is not up
-        {
-            //Perform melee attack
-            if (attackList.performMeleeAttack())    //if aura ttack started
-            {
-                //Shoot three times at the end of the attack
-                attackList.shootAt(new Vector3(1f, 0, 0.5f));
-                attackList.shootAt(new Vector3(1f, 0, 0));
-                attackList.shootAt(new Vector3(1f, 0, -0.5f));
+        //if (!bossStats.pShieldEnabled)              //if shield is not up
+        //{
+        //    //Perform melee attack
+        //    if (attackList.performMeleeAttack())    //if aura ttack started
+        //    {
+        //        //Shoot three times at the end of the attack
+        //        attackList.shootAt(new Vector3(1f, 0, 0.5f));
+        //        attackList.shootAt(new Vector3(1f, 0, 0));
+        //        attackList.shootAt(new Vector3(1f, 0, -0.5f));
 
-                //Teleport
-                switch (bossStats.getOrientation())
-                {
-                    case Orientation.Left:
-                        attackList.teleport(Orientation.Top);
-                        break;
+        //        //Teleport
+        //        switch (bossStats.getOrientation())
+        //        {
+        //            case Orientation.Left:
+        //                attackList.teleport(Orientation.Top);
+        //                break;
 
-                    case Orientation.Top:
-                        attackList.teleport(Orientation.Right);
-                        break;
+        //            case Orientation.Top:
+        //                attackList.teleport(Orientation.Right);
+        //                break;
 
-                    case Orientation.Right:
-                        attackList.teleport(Orientation.Left);
+        //            case Orientation.Right:
+        //                attackList.teleport(Orientation.Left);
 
-                        //TEST
-                        bossStats.TakePDamage(100);
-                        break;
-                }
-            }
-        }
+        //                //TEST
+        //                bossStats.TakePDamage(100);
+        //                break;
+        //        }
+        //    }
+        //}
     }
+
+}
+
+//ENUM
+public enum Zones
+{
+    Melee,
+    Left,
+    Right,
+    Middle,
+    Back
 }

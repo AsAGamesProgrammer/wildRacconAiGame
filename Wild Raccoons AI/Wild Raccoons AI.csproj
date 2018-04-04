@@ -82,6 +82,7 @@
     <Compile Include="Assets\Development\Decision Making\Scripts\BossAttacks.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\BulletScript.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\Stats.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Zone.cs" />
     <Compile Include="Assets\Development\Generic\Boss Assets\HandController.cs" />
     <Compile Include="Assets\Development\Generic\Minor Enemy Assets\Enemy Models\Enemy Spawn Indicator\SpawnEnemyScript.cs" />
     <Compile Include="Assets\Development\Generic\Minor Enemy Assets\PF_Enemy.cs" />
