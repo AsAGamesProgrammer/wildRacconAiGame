@@ -16,6 +16,8 @@ public class PF_Player : MonoBehaviour
     private float baseMovespeed = 20f;
     private float currentMovespeed = 20f;
 
+    private bool canMove = true;
+
     public float turnSpeed = 3f;
     public float turnDistance = 5f;
 
@@ -68,7 +70,7 @@ public class PF_Player : MonoBehaviour
 
                 RaycastHit hit;
                 
-                // 
+                // Make sure the click was somewhere on the map.
                 if (Physics.Raycast(ray, out hit, 1000f, 1 << LayerMask.NameToLayer("Grass")))
                 {
                     targetPosition = hit.point;
@@ -143,17 +145,21 @@ public class PF_Player : MonoBehaviour
 
                 if (followingPath)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(path.lookPoints[pathIndex] - transform.position);
+                    // If the player is not incapacitated.
+                    if(canMove)
+                    {
+                        Quaternion targetRotation = Quaternion.LookRotation(path.lookPoints[pathIndex] - transform.position);
 
-                    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
 
-                    Vector3 temp = transform.rotation.eulerAngles;
+                        Vector3 temp = transform.rotation.eulerAngles;
 
-                    temp.z = 0;
+                        temp.z = 0;
 
-                    transform.rotation = Quaternion.Euler(temp);
+                        transform.rotation = Quaternion.Euler(temp);
 
-                    transform.Translate(Vector3.forward * Time.deltaTime * currentMovespeed, Space.Self);
+                        transform.Translate(Vector3.forward * Time.deltaTime * currentMovespeed, Space.Self);
+                    }
                 }
 
                 yield return null;
@@ -282,6 +288,16 @@ public class PF_Player : MonoBehaviour
     public void SetCurrentMovespeed(float newMovespeed_)
     {
         currentManaRegen = newMovespeed_;
+    }
+
+    // Movement Enabled?
+    public bool GetCanMove()
+    {
+        return canMove;
+    }
+    public void SetCanMove(bool flag)
+    {
+        canMove = flag;
     }
 
     public void OnDrawGizmos()

@@ -81,7 +81,7 @@ public class BossAttacks : MonoBehaviour {
             }
         }
 
-        //leftHandController.CreateIndicator(player.transform.position);
+        leftHandController.InitiateGrab(player.transform.position);
     }
 
     //UPDATE
@@ -133,20 +133,18 @@ public class BossAttacks : MonoBehaviour {
         shieldScript.applyShield(shieldType.Magical);
     }
 
-    //*********TODO**********
     //HANDS
     //Left hand
     public void shootLeftHand()
     {
-        //shoot
+        leftHandController.InitiateGrab(player.transform.position);
     }
 
     //Right hand
     public void shootRightHand()
     {
-        //shoot
+        rightHandController.InitiateGrab(player.transform.position);
     }
-    //***********************
 
     //SPAWN ENEMIES
     public void spawnEnemiesLeft()
