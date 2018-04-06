@@ -13,6 +13,9 @@ public class PF_Player : MonoBehaviour
     private float maxMana = 100f;
     private float currentManaRegen = 5f;
 
+    private int Invulnerability = 2;
+    private bool invulnerable;
+
     private float baseMovespeed = 20f;
     private float currentMovespeed = 20f;
 
@@ -43,7 +46,17 @@ public class PF_Player : MonoBehaviour
     public Slider manaSlider;
     public Text manaText;
 
-    private void Awake()
+    public PlayerAbilities ActivePower = PlayerAbilities.Arcane;
+
+    public enum PlayerAbilities
+    {
+        Physical,
+        Arcane,
+        Teleport,
+        Shield
+    };
+
+  private void Awake()
     {
         rangeIndicator = GameObject.FindGameObjectWithTag("Range Indicator");
 
@@ -53,11 +66,21 @@ public class PF_Player : MonoBehaviour
         currentMana = 40f;
     }
 
+    private void ManaUpdate()
+    {
+        if (currentMana < 0)
+            ModifyCurrentMana(0);
+        if (currentMana < maxMana)
+            ModifyCurrentMana(currentManaRegen);
+    }
+
     private void Update()
     {
         clickCooldown -= Time.deltaTime;
 
         RefreshUI();
+
+        ManaUpdate();
 
         newPathCooldownRemaining -= Time.deltaTime;
 
@@ -200,18 +223,35 @@ public class PF_Player : MonoBehaviour
     {
         currentHealth = newHealthValue_;
     }
+
+    bool CheckIfNegitive(float modifyValue_)
+    {
+        return modifyValue_ < 0;
+    }
+
     public void ModifyCurrentHealth(float modifyValue_)
     {
+        if (CheckIfNegitive(modifyValue_) && invulnerable)
+            return;
         currentHealth += modifyValue_;
+        if (CheckIfNegitive(modifyValue_))
+            StartCoroutine(InvulnerabilityTimer());
 
         // Check if the value is greater than the max health value.
-        if(currentHealth > maxHealth)
+        if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
     }
 
-    // Max Health
+    private IEnumerator InvulnerabilityTimer()
+    {
+        invulnerable = true;
+        yield return new WaitForSeconds(Invulnerability);
+        invulnerable = false;
+    }
+
+  // Max Health
     public float GetMaxHealth()
     {
         return maxHealth;

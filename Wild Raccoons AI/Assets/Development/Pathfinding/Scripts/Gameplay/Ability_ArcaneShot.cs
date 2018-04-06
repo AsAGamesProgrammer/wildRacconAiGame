@@ -8,6 +8,7 @@ public class Ability_ArcaneShot : Ability_Base
     // cooldownRemaining
     // range
     private Vector3 targetPosition;
+    public float SpellCost = 20f;
 
     public GameObject projectile;
 
@@ -25,19 +26,18 @@ public class Ability_ArcaneShot : Ability_Base
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 1000f, 1 << LayerMask.NameToLayer("Click Plane")))
-        {
+        if (!Physics.Raycast(ray, out hit, 1000f, 1 << LayerMask.NameToLayer("Click Plane"))) return;
             targetPosition = hit.point;
-
+        if (player.GetComponent<PF_Player>().GetCurrentMana() < SpellCost) return;
             UseAbility();
-        }
     }
 
     protected override void UseAbility()
     {
         // Cancel movement for the player.
         player.GetComponent<PF_Player>().CancelMovement();
-
+        player.GetComponent<PF_Player>().ModifyCurrentMana(-SpellCost);
+        player.GetComponent<PF_Player>().ActivePower = PF_Player.PlayerAbilities.Arcane;
         // Calculate the direction of the shot.
         Vector3 shotDirection = targetPosition - player.transform.position;
 
