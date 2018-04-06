@@ -20,8 +20,7 @@ public class HandController : MonoBehaviour
 
     private HandState currentHandState = HandState.Idle;
 
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
+    public GameObject homeTransform;
 
     private Vector3 targetPosition;
     private Vector3 targetDirection;
@@ -39,9 +38,6 @@ public class HandController : MonoBehaviour
 
     private void Awake()
     {
-        originalPosition = transform.position;
-        originalRotation = transform.rotation;
-
         //KRISTINA
         attackManagerScript = GameObject.FindGameObjectWithTag("BossManager").GetComponent<AttackManager>();
     }
@@ -76,8 +72,8 @@ public class HandController : MonoBehaviour
             }
             else
             {
-                transform.position = originalPosition;
-                transform.rotation = originalRotation;
+                transform.position = homeTransform.transform.position;
+                transform.rotation = homeTransform.transform.rotation;
 
                 if(playerScript != null)
                 {
