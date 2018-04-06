@@ -22,6 +22,10 @@ public class AttackManager : MonoBehaviour {
     //List of attacks
     List<BossActions> pastBossActions = new List<BossActions>();
 
+    //Hands
+    public GameObject leftHand;
+    public GameObject rightHand;
+
     //Other
     public int averageManaCost = 20; //Average price for mana ability, used to select shields
 
@@ -134,6 +138,25 @@ public class AttackManager : MonoBehaviour {
                     }
                     break;
 
+                //BACK
+                case (Zones.Back):
+                    //Grab with the closest hand
+                    if (Vector3.Distance(playerScript.gameObject.transform.position, leftHand.transform.position) >
+                        Vector3.Distance(playerScript.gameObject.transform.position, rightHand.transform.position))
+                    {
+                        Debug.Log("Right hand grab");
+                        attackList.shootRightHand();
+                        pastBossActions.Add(BossActions.RightHandGrab);
+
+                    }
+                    else
+                    {
+                        Debug.Log("Left hand grab");
+                        attackList.shootLeftHand();
+                        pastBossActions.Add(BossActions.LeftHandGrab);
+                    }
+                    break;
+
                 default:
                     NextAttack = true;
                     break;
@@ -202,9 +225,9 @@ public enum BossActions
     ShootThree,
     ShootFive,
     None,
-    LeftHand,
-    RightHand,
     SpawnEnemies,
+    RightHandGrab,
+    LeftHandGrab,
     Teleport
 }
 

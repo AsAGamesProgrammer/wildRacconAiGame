@@ -25,12 +25,6 @@ public class BossAttacks : MonoBehaviour {
     //Scripts
     Stats bossStats;
 
-    ////Melee attack
-    //public float meleeAttackRadius = 10;
-    //public Vector3 sphereGrowthVector = new Vector3(0.01f, 0.01f, 0.01f);
-    //public GameObject explosionSpherePrefab;    //prefab
-    //GameObject meleeAttack;     //Object
-
     //Shooting
     public GameObject bulletPrefab;
 
@@ -80,8 +74,6 @@ public class BossAttacks : MonoBehaviour {
                     break;
             }
         }
-
-        leftHandController.InitiateGrab(player.transform.position);
     }
 
     //UPDATE

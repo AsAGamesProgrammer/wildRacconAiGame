@@ -34,10 +34,16 @@ public class HandController : MonoBehaviour
 
     public float grabDamage = 250f;
 
+    //KRISTINA
+    AttackManager attackManagerScript;
+
     private void Awake()
     {
         originalPosition = transform.position;
         originalRotation = transform.rotation;
+
+        //KRISTINA
+        attackManagerScript = GameObject.FindGameObjectWithTag("BossManager").GetComponent<AttackManager>();
     }
 
     private void FixedUpdate()
@@ -83,6 +89,9 @@ public class HandController : MonoBehaviour
                 currentDistance = 0f;
 
                 currentHandState = HandState.Idle;
+
+                //KRISTINA WAS HERE
+                attackManagerScript.NextAttack = true;
             }
         }
     }
