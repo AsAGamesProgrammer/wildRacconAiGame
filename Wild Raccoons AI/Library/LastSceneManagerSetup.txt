@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Development/Pathfinding/Pathfinding Boss Arena.unity
+- path: Assets/Development/Generic/StartScene.unity
   isLoaded: 1
   isActive: 1

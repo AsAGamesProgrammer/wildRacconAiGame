@@ -175,8 +175,6 @@ public class PF_Enemy : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            Debug.Log("wew");
-
             Debug.Log(attackManagerScript.NextAttack);
 
             SelfDestruct();
