@@ -11,7 +11,7 @@ public class PF_Player : MonoBehaviour
 
     private float currentMana = 100f;
     private float maxMana = 100f;
-    private float currentManaRegen = 5f;
+    private float currentManaRegen = 0.2f;
 
     private int Invulnerability = 2;
     private bool invulnerable;

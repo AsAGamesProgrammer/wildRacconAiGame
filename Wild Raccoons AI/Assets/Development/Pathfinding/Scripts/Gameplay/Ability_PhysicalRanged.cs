@@ -55,7 +55,7 @@ public class Ability_PhysicalRanged : Ability_Base
     GameObject spawnedProjectile = Instantiate(projectile, abilitySpawn.transform.position, player.transform.rotation);
 
     // Give the projectile the correct script.
-    Projectile_ArcaneShot projectileScript = spawnedProjectile.AddComponent<Projectile_ArcaneShot>();
+    Projectile_PhysicalShot projectileScript = spawnedProjectile.AddComponent<Projectile_PhysicalShot>();
 
     // Modify initial script values.
     projectileScript.movespeed = 3f;

@@ -23,7 +23,9 @@ public class Ability_MagicShield : Ability_Base
   protected override void UseAbility()
   {
     player.GetComponent<PF_Player>().ActivePower = PF_Player.PlayerAbilities.Shield;
-    if (!isActive)
+    if (isActive && spawnedShield == null)
+      isActive = false;
+    if (!isActive && spawnedShield == null)
     {
       spawnedShield = Instantiate(shield, abilitySpawn.transform.position, player.transform.rotation);
       Area_ManaShield Shield = spawnedShield.AddComponent<Area_ManaShield>();
@@ -34,6 +36,7 @@ public class Ability_MagicShield : Ability_Base
     else if (isActive)
     {
       Destroy(spawnedShield);
+      spawnedShield = null;
       isActive = false;
     }
   }

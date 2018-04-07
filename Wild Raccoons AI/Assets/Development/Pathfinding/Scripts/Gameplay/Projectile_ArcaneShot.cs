@@ -6,10 +6,18 @@ public class Projectile_ArcaneShot : MonoBehaviour
 {
     public float movespeed = 0f;
     public float lifeSpan = 999f;
-
+    private GameObject boss;
     private void Start()
     {
+        boss = GameObject.FindWithTag("BossManager");
+    }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+      if (collision.gameObject.tag != "Boss")
+          return;
+      boss.GetComponent<Stats>().TakeMDamage(60);
+      Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -25,5 +33,5 @@ public class Projectile_ArcaneShot : MonoBehaviour
         {
             Destroy(gameObject);
         }
-	}
+	  }
 }
