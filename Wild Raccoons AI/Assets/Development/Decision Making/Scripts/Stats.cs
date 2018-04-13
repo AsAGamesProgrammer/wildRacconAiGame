@@ -11,6 +11,8 @@ public class Stats : MonoBehaviour {
     bool pShieldEnabled = false;
     bool mShieldEnabled = false;
 
+    private StartMenuController startMenuScript;
+
     //Phases
     public Slider healthBar;
     public Image fillColour;
@@ -24,6 +26,8 @@ public class Stats : MonoBehaviour {
     //START
     private void Start()
     {
+        startMenuScript = FindObjectOfType<StartMenuController>();
+
         fillColour.color = Color.green;
     }
 
@@ -84,6 +88,8 @@ public class Stats : MonoBehaviour {
             //************TODO***********
             //Game over
             isDead = true;
+
+            startMenuScript.changeScreenWin();
         }
 
         Debug.Log("I AM DEAD!!!");

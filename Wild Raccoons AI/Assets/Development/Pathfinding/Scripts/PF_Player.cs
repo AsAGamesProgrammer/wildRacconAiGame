@@ -46,6 +46,8 @@ public class PF_Player : MonoBehaviour
     public Slider manaSlider;
     public Text manaText;
 
+    private StartMenuController startMenuScript;
+
     public PlayerAbilities ActivePower = PlayerAbilities.Arcane;
 
     public enum PlayerAbilities
@@ -62,8 +64,7 @@ public class PF_Player : MonoBehaviour
 
         rangeIndicator.SetActive(false);
 
-        currentHealth = 550f;
-        currentMana = 40f;
+        startMenuScript = FindObjectOfType<StartMenuController>();
     }
 
     private void ManaUpdate()
@@ -119,6 +120,11 @@ public class PF_Player : MonoBehaviour
 
                 newPathCooldownRemaining = newPathCooldown;
             }
+        }
+
+        if(currentHealth <= 0)
+        {
+            startMenuScript.changeScreenDeath();
         }
     }
 
