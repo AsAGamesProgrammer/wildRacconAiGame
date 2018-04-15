@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Development.Learning.Scripts;
 using UnityEngine;
 
 
@@ -79,7 +80,8 @@ public class BossAttacks : MonoBehaviour {
     //UPDATE
     private void Update()
     {
-
+      NaiveBayesLearning BlockLearn = new NaiveBayesLearning();
+      BlockLearn.BlockLearn();
     }
 
     //MELEE

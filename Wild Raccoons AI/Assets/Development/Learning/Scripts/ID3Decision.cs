@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Development.Learning.Scripts;
 using UnityEngine;
 
 public class ID3Decision : MonoBehaviour {
@@ -20,12 +21,12 @@ public class ID3Decision : MonoBehaviour {
   {
     if (dataExamples.Length == 0) return 0f;
     int numExamples = dataExamples.Length;
-    var tallies = new Dictionary<ID3LearningAction, int>();
+    var tallies = new Dictionary<Id3LearningAction, int>();
     foreach (ID3Learning e in dataExamples)
     {
-      if (!tallies.ContainsKey(e.action))
-        tallies.Add(e.action, 0);
-      tallies[e.action]++;
+      if (!tallies.ContainsKey(e.Action))
+        tallies.Add(e.Action, 0);
+      tallies[e.Action]++;
     }
     int keysCount = tallies.Keys.Count;
     if (keysCount == 0) return 0f;
@@ -59,10 +60,9 @@ public class ID3Decision : MonoBehaviour {
     float gain = 0f;
     string splitAttribute = "";
     var bestSets = new Dictionary<float, List<ID3Learning>>();
-    Dictionary<float, List<ID3Learning>> sets;
     foreach (string a in learningAttribute)
     {
-      sets = SplitByAttribute(dataExamples, a);
+      var sets = SplitByAttribute(dataExamples, a);
       var overallEntropy = GetEntropy(sets, numberOfExamples);
       var infoGain = entropy - overallEntropy;
       if (infoGain > gain)

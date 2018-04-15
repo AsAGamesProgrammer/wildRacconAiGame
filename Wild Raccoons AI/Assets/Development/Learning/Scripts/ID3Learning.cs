@@ -1,18 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum ID3LearningAction
+namespace Assets.Development.Learning.Scripts
 {
-  STOP, WALK, RUN
-}
-
-public class ID3Learning : MonoBehaviour {
-  public ID3LearningAction action;
-  public Dictionary<string, float> values;
-
-  public float GetValue(string attribute)
+  public enum Id3LearningAction
   {
-    return values[attribute];
+    Stop, Walk, Run
+  }
+
+  public class ID3Learning : MonoBehaviour {
+    public Id3LearningAction Action;
+    public Dictionary<string, float> Values;
+
+    public float GetValue(string attribute)
+    {
+      return Values[attribute];
+    }
   }
 }

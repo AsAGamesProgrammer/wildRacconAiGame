@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class DecisionNodeClass : MonoBehaviour {
@@ -9,7 +8,7 @@ public class DecisionNodeClass : MonoBehaviour {
 
   public DecisionNodeClass(string value = "")
   {
-    this.Value = value;
+    Value = value;
     Children = new Dictionary<float, DecisionNodeClass>();
   }
 }
