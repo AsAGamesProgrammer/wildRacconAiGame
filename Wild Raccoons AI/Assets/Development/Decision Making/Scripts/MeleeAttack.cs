@@ -9,7 +9,8 @@ public class MeleeAttack : MonoBehaviour {
     public Vector3 sphereGrowthVector = new Vector3(0.01f, 0.01f, 0.01f);
     public GameObject explosionSpherePrefab;    //prefab
     GameObject meleeAttack;     //Object
-
+    
+    int damage = 20;
     //Flag
     bool attackPrepared = false;
     bool attackOnGoing = false;
@@ -22,8 +23,8 @@ public class MeleeAttack : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+    
+  }
 	
 	// Update is called once per frame
 	void Update ()
@@ -63,4 +64,6 @@ public class MeleeAttack : MonoBehaviour {
     {
         prepareMeleeAttack();
     }
+
+  
 }

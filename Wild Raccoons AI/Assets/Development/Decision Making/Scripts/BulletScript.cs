@@ -76,7 +76,12 @@ public class BulletScript : MonoBehaviour {
         if(other.gameObject == playerModel)
         {
             playerScript.ModifyCurrentHealth(damage * -1);
-
+            var learning = FindObjectOfType<BossAttacks>();
+            learning.GetComponent<BossAttacks>().BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+            {
+              Lable = "Bullet",
+              Features = new List<string>() { "Hit", "Attack" }
+            });
             //Send msg to bullet pattern
             bulletPattern.destroyedBullets++;
 

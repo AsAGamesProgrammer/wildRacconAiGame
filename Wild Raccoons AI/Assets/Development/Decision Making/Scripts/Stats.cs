@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Stats : MonoBehaviour {
 
-    float health = 1000;
+    public float health = 1000;
+    public float maxHealth = 1000;
     public Orientation orientation = Orientation.Top;
 
     bool pShieldEnabled = false;

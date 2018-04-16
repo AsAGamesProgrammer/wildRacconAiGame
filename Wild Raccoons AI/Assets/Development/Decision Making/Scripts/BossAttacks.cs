@@ -47,10 +47,14 @@ public class BossAttacks : MonoBehaviour {
     bool attackExecuting = false;
     bool attackFinished = false;
 
+    //Learning
+    public NaiveBayesLearning BlockLearn;
+
 
     //START
     private void Start()
     {
+        BlockLearn = new NaiveBayesLearning();
         //Get scripts
         bossStats = GetComponent<Stats>();
         //Bullet pattern
@@ -80,14 +84,23 @@ public class BossAttacks : MonoBehaviour {
     //UPDATE
     private void Update()
     {
-      NaiveBayesLearning BlockLearn = new NaiveBayesLearning();
-      BlockLearn.BlockLearn();
+      if(bossStats.health< (bossStats.maxHealth/4)* 3)
+      {
+        BlockLearn.BlockLearn();
+        var x = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
+        var y = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
+      }
     }
 
     //MELEE
     public void AttackMelee()
     {
         meleeAttackScript.performMeleeAttack();
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Melee",
+          Features = new List<string>() { "Initiated", "Attack"}
+        });
     }
 
     //SHOOT
@@ -95,11 +108,21 @@ public class BossAttacks : MonoBehaviour {
     public void shootThree()
     {
         bulletPattern.ShootThreeBullets();
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Bullet",
+          Features = new List<string>() { "Initiated", "Attack" }
+        });
     }
 
     public void shootFive()
     {
         bulletPattern.ShootFiveBullets();
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Bullet",
+          Features = new List<string>() { "Initiated", "Attack" }
+        });
     }
 
 
@@ -109,7 +132,11 @@ public class BossAttacks : MonoBehaviour {
     {
         boss.transform.position = orientationDictionary[orientation].position;  //Position
         boss.transform.rotation = orientationDictionary[orientation].rotation;  //Rotation
-
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Teleport",
+          Features = new List<string>() { "Initiated", "Travel" }
+        });
         //Update stats
         bossStats.setOrientation(orientation);
     }
@@ -119,12 +146,22 @@ public class BossAttacks : MonoBehaviour {
     public void applyPhysicalShield()
     {
         shieldScript.applyShield(shieldType.Physycal);
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Physical Shield",
+          Features = new List<string>() { "Initiated", "Shield" }
+        });
     }
 
     //Magical
     public void applyMagicalShield()
     {
         shieldScript.applyShield(shieldType.Magical);
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Magic Shield",
+          Features = new List<string>() { "Initiated", "Shield" }
+        });
     }
 
     //HANDS
@@ -132,23 +169,43 @@ public class BossAttacks : MonoBehaviour {
     public void shootLeftHand()
     {
         leftHandController.InitiateGrab(player.transform.position);
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Left Hand",
+          Features = new List<string>() { "Initiated", "Pull" }
+        });
     }
 
     //Right hand
     public void shootRightHand()
     {
         rightHandController.InitiateGrab(player.transform.position);
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Right Hand",
+          Features = new List<string>() { "Initiated", "Pull" }
+        });
     }
 
     //SPAWN ENEMIES
     public void spawnEnemiesLeft()
     {
         leftHandController.CreateIndicator(player.transform.position);
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Left Spawn",
+          Features = new List<string>() { "Initiated", "Spawn" }
+        });
     }
 
     public void spawnEnemiesRight()
     {
         rightHandController.CreateIndicator(player.transform.position);
+        BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+        {
+          Lable = "Right Spawn",
+          Features = new List<string>() { "Initiated", "Spawn" }
+        });
     }
 
 }

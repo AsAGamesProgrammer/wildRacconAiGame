@@ -6,16 +6,20 @@ using System.Reflection;
 using UnityEngine;
 
 public class NaiveBayesLearning : MonoBehaviour {
+  public List<InformationModel> Data = new List<InformationModel>();
+  Classifier data;
   public void BlockLearn()
   {
-    var data = new Classifier();
-    List<InformationModel> x = data.GetTrainingData();
-    //data.SaveTrainingData(x);
-    data.Teach(x);
-    //data.Teach(x);
-    IDictionary<string, double> dict = data.Classify(new List<string>() { "Red", "SUV", "Domestic" });
-    IDictionary<string, double> dict1 = data.Classify(new List<string>() { "Yellow", "SUV", "Domestic" });
+    data = new Classifier();
+    data.Teach(Data);
   }
+
+  public IDictionary<string, double> Classify(List<string> test)
+  {
+    IDictionary<string, double> dict = data.Classify(test);
+    return dict;
+  }
+
   public class InformationModel
   {
     /// <summary>
