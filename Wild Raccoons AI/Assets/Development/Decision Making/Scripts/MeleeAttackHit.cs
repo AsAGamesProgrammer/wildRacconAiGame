@@ -5,7 +5,7 @@ using UnityEngine;
 public class MeleeAttackHit : MonoBehaviour {
   GameObject playerModel;
   PF_Player playerScript;
-  int damage = 20;
+  public int damage = 20;
   // Use this for initialization
   void Start () {
     GameObject[] playerTagged = GameObject.FindGameObjectsWithTag("Player");

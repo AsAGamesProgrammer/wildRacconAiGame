@@ -117,66 +117,7 @@ public class NaiveBayesLearning : MonoBehaviour {
       return result;
     }
 
-    public List<InformationModel> GetTrainingData()
-    {
-      var data = new List<InformationModel>()
-                {
-                        new InformationModel()
-                        {
-                            Lable = "Yes",
-                            Features = new List<string>(){"Red","Sports","Domestic"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "Yes",
-                            Features = new List<string>(){"Red","Sports","Domestic"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "Yes",
-                            Features = new List<string>(){"Yellow","Sports","Imported"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "Yes",
-                            Features = new List<string>(){"Yellow","SUV","Imported"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "Yes",
-                            Features = new List<string>(){"Red","Sports","Imported"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "No",
-                            Features = new List<string>(){"Red","Sports","Domestic"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "No",
-                            Features = new List<string>(){"Yellow","Sports","Domestic"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "No",
-                            Features = new List<string>(){"Yellow","SUV","Imported"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "No",
-                            Features = new List<string>(){"Yellow","SUV","Domestic"}
-                        },
-                        new InformationModel()
-                        {
-                            Lable = "No",
-                            Features = new List<string>(){"Red","SUV","Imported"}
-                        }
-                };
-
-
-      return data;
-    }
-
+    
     public void SaveTrainingData(object modelInfos)
     {
       if (modelInfos == null)

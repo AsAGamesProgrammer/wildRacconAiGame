@@ -21,7 +21,7 @@ public class BulletScript : MonoBehaviour {
     public float maxBossDistance = 20;
 
     //Damage
-    int damage = 20;
+    public int damage = 20;
 
     //Player
     GameObject playerModel;

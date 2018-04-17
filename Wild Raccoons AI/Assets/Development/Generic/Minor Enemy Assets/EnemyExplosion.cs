@@ -22,8 +22,13 @@ public class EnemyExplosion : MonoBehaviour
             if(!damageDone)
             {
                 playerScript.ModifyCurrentHealth(-explosionDamage);
-
+                var learning = FindObjectOfType<BossAttacks>();
                 damageDone = true;
+                learning.BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+                {
+                  Lable = "Spawn",
+                  Features = new List<string>() { "Hit", "Attack" }
+                });
             }
         }
     }

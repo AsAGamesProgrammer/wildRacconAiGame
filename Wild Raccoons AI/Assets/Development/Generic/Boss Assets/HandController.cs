@@ -135,6 +135,12 @@ public class HandController : MonoBehaviour
                 playerScript.SetCanMove(false);
 
                 playerScript.ModifyCurrentHealth(-grabDamage);
+                var learning = FindObjectOfType<BossAttacks>();
+                learning.BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
+                {
+                  Lable = "Hand",
+                  Features = new List<string>() { "Hit", "Attack" }
+                });
 
                 other.transform.parent.transform.parent = transform;
 

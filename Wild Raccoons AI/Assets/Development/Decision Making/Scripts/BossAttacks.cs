@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Development.Learning.Scripts;
 using UnityEngine;
 
@@ -49,6 +50,9 @@ public class BossAttacks : MonoBehaviour {
 
     //Learning
     public NaiveBayesLearning BlockLearn;
+    private bool phase1;
+    private bool phase2;
+    private bool phase3;
 
 
     //START
@@ -81,15 +85,59 @@ public class BossAttacks : MonoBehaviour {
         }
     }
 
+    private void IncreaseAbilityDamage(string key)
+    {
+        switch (key)
+        {
+            case "Bullet":
+                var masterBullet = GameObject.FindObjectOfType<BulletPattern>();
+                var updateBullet = masterBullet.bulletPrefab.GetComponent<BulletScript>();
+                updateBullet.damage *= 2;
+                break;
+            case "Melee":
+                var masterMelee = GameObject.FindObjectOfType<MeleeAttack>();
+                var updateMelee = masterMelee.explosionSpherePrefab.GetComponent<MeleeAttackHit>();
+                updateMelee.damage *= 2;
+                break;
+            case "Hand":
+                leftHandController.grabDamage *= 2; 
+                rightHandController.grabDamage *= 2;
+                break;
+            case "Spawn":
+                var child = leftHandController.spawnIndicatorPrefab.GetComponent<SpawnEnemyScript>();
+                var updateChild = child.enemy.GetComponentInChildren<EnemyExplosion>();
+                updateChild.explosionDamage *= 2;
+                break;
+        }
+    }
+
     //UPDATE
     private void Update()
     {
-      if(bossStats.health< (bossStats.maxHealth/4)* 3)
-      {
-        BlockLearn.BlockLearn();
-        var x = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
-        var y = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
-      }
+        if(bossStats.health< (bossStats.maxHealth/4)* 3 && !phase1)
+        {
+            BlockLearn.BlockLearn();
+            var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
+            var max = results.Keys.Min();
+            IncreaseAbilityDamage(max);
+            phase1 = true;
+        }
+        else if (bossStats.health < (bossStats.maxHealth / 4) * 2 && !phase2)
+        {
+            BlockLearn.BlockLearn();
+            var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
+            var max = results.Keys.Min();
+            IncreaseAbilityDamage(max);
+            phase2 = true;
+        }
+        else if (bossStats.health < (bossStats.maxHealth / 4) && !phase3)
+        {
+            BlockLearn.BlockLearn();
+            var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
+            var max = results.Keys.Min();
+            IncreaseAbilityDamage(max);
+            phase3 = true;
+        }
     }
 
     //MELEE
@@ -193,8 +241,8 @@ public class BossAttacks : MonoBehaviour {
         leftHandController.CreateIndicator(player.transform.position);
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
-          Lable = "Left Spawn",
-          Features = new List<string>() { "Initiated", "Spawn" }
+          Lable = "Spawn",
+          Features = new List<string>() { "Initiated", "Attack" }
         });
     }
 
@@ -203,8 +251,8 @@ public class BossAttacks : MonoBehaviour {
         rightHandController.CreateIndicator(player.transform.position);
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
-          Lable = "Right Spawn",
-          Features = new List<string>() { "Initiated", "Spawn" }
+          Lable = "Spawn",
+          Features = new List<string>() { "Initiated", "Attack" }
         });
     }
 
