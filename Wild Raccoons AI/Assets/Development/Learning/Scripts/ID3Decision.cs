@@ -3,21 +3,27 @@ using Assets.Development.Learning.Scripts;
 using UnityEngine;
 
 public class ID3Decision : MonoBehaviour {
-
-  public Dictionary<float, List<ID3Learning>> SplitByAttribute( ID3Learning[] dataExamples, string learningAttribute)
+  #region private functions
+  /// <summary>
+  /// Function to split the learning attributes and return 
+  /// </summary>
+  /// <param name="dataExamples"></param>
+  /// <param name="learningAttribute"></param>
+  /// <returns></returns>
+  private Dictionary<float, List<ID3Learning>> SplitByAttribute( ID3Learning[] dataExamples, string learningAttribute)
   {
-    var sets = new Dictionary<float, List<ID3Learning>>();
+    var attributes = new Dictionary<float, List<ID3Learning>>();
     foreach (ID3Learning e in dataExamples)
     {
       float key = e.GetValue(learningAttribute);
-      if (!sets.ContainsKey(key))
-        sets.Add(key, new List<ID3Learning>());
-      sets[key].Add(e);
+      if (!attributes.ContainsKey(key))
+        attributes.Add(key, new List<ID3Learning>());
+      attributes[key].Add(e);
     }
-    return sets;
+    return attributes;
   }
 
-  public float GetEntropy(ID3Learning[] dataExamples)
+  private float GetEntropy(ID3Learning[] dataExamples)
   {
     if (dataExamples.Length == 0) return 0f;
     int numExamples = dataExamples.Length;
@@ -39,7 +45,7 @@ public class ID3Decision : MonoBehaviour {
     return entropy;
   }
 
-  public float GetEntropy( Dictionary<float, List<ID3Learning>> sets, int numberOfExamples)
+  private float GetEntropy( Dictionary<float, List<ID3Learning>> sets, int numberOfExamples)
   {
     float entropy = 0f;
     foreach (List<ID3Learning> s in sets.Values)
@@ -49,7 +55,7 @@ public class ID3Decision : MonoBehaviour {
     }
     return entropy;
   }
-
+  #endregion
 
   public void MakeTree( ID3Learning[] dataExamples, List<string> learningAttribute, DecisionNodeClass node)
   {
