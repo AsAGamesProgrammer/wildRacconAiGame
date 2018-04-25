@@ -78,14 +78,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Development\Decision Making\Scripts\Attack Implementation\BulletPattern.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Attack Implementation\BulletScript.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Attack Implementation\MeleeAttack.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Attack Implementation\MeleeAttackHit.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Attack Implementation\PhysicalShield.cs" />
+    <Compile Include="Assets\Development\Decision Making\Scripts\Attack Implementation\Shield.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\AttackManager.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\BossAttacks.cs" />
-    <Compile Include="Assets\Development\Decision Making\Scripts\BulletPattern.cs" />
-    <Compile Include="Assets\Development\Decision Making\Scripts\BulletScript.cs" />
-    <Compile Include="Assets\Development\Decision Making\Scripts\MeleeAttack.cs" />
-    <Compile Include="Assets\Development\Decision Making\Scripts\MeleeAttackHit.cs" />
-    <Compile Include="Assets\Development\Decision Making\Scripts\PhysicalShield.cs" />
-    <Compile Include="Assets\Development\Decision Making\Scripts\Shield.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\Stats.cs" />
     <Compile Include="Assets\Development\Decision Making\Scripts\Zone.cs" />
     <Compile Include="Assets\Development\Generic\Audio\BossMusic.cs" />

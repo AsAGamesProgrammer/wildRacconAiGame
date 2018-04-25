@@ -2,7 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// TARGET: Empty Game Object tagged as BossManager
+/// PURPOSE: This script controls all the deicion making on the top level
+/// </summary>
+
+
 public class AttackManager : MonoBehaviour {
+
+    #region Global Variables
 
     //Script
     BossAttacks attackList;
@@ -29,8 +37,11 @@ public class AttackManager : MonoBehaviour {
     //Other
     public int averageManaCost = 20; //Average price for mana ability, used to select shields
 
-	// Use this for initialization
-	void Start ()
+    #endregion
+
+    #region Initialisation
+    // Use this for initialization
+    void Start ()
     {
         //Getting script information
         attackList = GetComponent<BossAttacks>();
@@ -40,25 +51,27 @@ public class AttackManager : MonoBehaviour {
         //Adding initial past action
         pastBossActions.Add(BossActions.None);
 
-        //Shoot at the beginning of the round
-        //attackList.shootAt(new Vector3(1f, 0, 0.3f));
-        //attackList.shootAt(new Vector3(1f, 0, -0.3f));
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    #endregion
+
+    // Update is called once per frame
+    void Update ()
     {
+        //Debugging
         Debug.Log("Is ready to attack " + NextAttack + " aiming for " + currentPlayerZone);
 
         //STATE MACHINE
         if (NextAttack)
         {
-            NextAttack = false;         //Attack performed
+            NextAttack = false;                         //Attack performed
             previouslyAttackedZone = currentPlayerZone; //Remember location
 
+        #region Decision tree
             switch(currentPlayerZone)
             {
-                //MIDDLE
+                //MELEEE
+                #region Melee zone
                 case (Zones.Melee):
                     //If the last attack was NOT melee attack melee
                     if (pastBossActions[pastBossActions.Count-1] != BossActions.Melee)
@@ -83,8 +96,10 @@ public class AttackManager : MonoBehaviour {
                             pastBossActions.Add(BossActions.MShield);
                         }
                     break;
+                #endregion
 
                 //LEFT
+                #region Left Zone
                 case (Zones.Left):
                     //If the last attack was not spawning enemies
                     if (pastBossActions[pastBossActions.Count - 1] != BossActions.SpawnEnemies)
@@ -101,8 +116,10 @@ public class AttackManager : MonoBehaviour {
                         pastBossActions.Add(BossActions.Teleport);
                     }
                     break;
+                #endregion
 
                 //RIGHT
+                #region Right Zone
                 case (Zones.Right):
                     //If the last attack was not spawning enemies
                     if (pastBossActions[pastBossActions.Count - 1] != BossActions.SpawnEnemies)
@@ -119,8 +136,10 @@ public class AttackManager : MonoBehaviour {
                         pastBossActions.Add(BossActions.Teleport);
                     }
                     break;
+                #endregion
 
                 //MIDDLE
+                #region Middle Zone
                 case (Zones.Middle):
                     //Shoot
                     if (pastBossActions[pastBossActions.Count - 1] != BossActions.ShootThree)
@@ -137,8 +156,10 @@ public class AttackManager : MonoBehaviour {
                         pastBossActions.Add(BossActions.ShootFive);
                     }
                     break;
+                #endregion
 
                 //BACK
+                #region Back Zone
                 case (Zones.Back):
                     //Grab with the closest hand
                     if (Vector3.Distance(playerScript.gameObject.transform.position, leftHand.transform.position) >
@@ -156,29 +177,20 @@ public class AttackManager : MonoBehaviour {
                         pastBossActions.Add(BossActions.LeftHandGrab);
                     }
                     break;
+                #endregion
 
+                //Default
                 default:
                     NextAttack = true;
                     break;
             }
 
+#endregion
+
         }
+     }
 
-            //attackList.applyPhysicalShield();           //shield
-
-            //if (!bossStats.pShieldEnabled)              //if shield is not up
-            //{
-            //    //Perform melee attack
-            //    if (attackList.performMeleeAttack())    //if aura ttack started
-            //    {
-            //        //Shoot three times at the end of the attack
-            //        attackList.shootAt(new Vector3(1f, 0, 0.5f));
-            //        attackList.shootAt(new Vector3(1f, 0, 0));
-            //        attackList.shootAt(new Vector3(1f, 0, -0.5f));
-            //    }
-            //}
-        }
-
+    #region Helpers
     //TELEPORT HELPER
     void TeleportHelper()
     {
@@ -200,10 +212,11 @@ public class AttackManager : MonoBehaviour {
                 break;
         }
     }
-
+    #endregion
 }
 
 //------------------------ENUM--------------------------
+#region ENUMS
 //Zones
 public enum Zones
 {
@@ -230,4 +243,6 @@ public enum BossActions
     LeftHandGrab,
     Teleport
 }
+
+#endregion
 
