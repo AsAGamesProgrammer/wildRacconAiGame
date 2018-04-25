@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public class DecisionNodeClass : MonoBehaviour {
-  #region properties
+  #region Properties
   public string Value;
   public Dictionary<float, DecisionNodeClass> Children;
   #endregion

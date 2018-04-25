@@ -3,7 +3,7 @@ using Assets.Development.Learning.Scripts;
 using UnityEngine;
 
 public class ID3Decision : MonoBehaviour {
-  #region private functions
+  #region Private Functions
   /// <summary>
   /// Function to split the learning attributes and return 
   /// </summary>
@@ -12,32 +12,39 @@ public class ID3Decision : MonoBehaviour {
   /// <returns></returns>
   private Dictionary<float, List<ID3Learning>> SplitByAttribute( ID3Learning[] dataExamples, string learningAttribute)
   {
-    var attributes = new Dictionary<float, List<ID3Learning>>();
+    var allAttributes = new Dictionary<float, List<ID3Learning>>();
     foreach (ID3Learning e in dataExamples)
     {
       float key = e.GetValue(learningAttribute);
-      if (!attributes.ContainsKey(key))
-        attributes.Add(key, new List<ID3Learning>());
-      attributes[key].Add(e);
+      if (!allAttributes.ContainsKey(key))
+        allAttributes.Add(key, new List<ID3Learning>());
+      allAttributes[key].Add(e);
     }
-    return attributes;
+    return allAttributes;
   }
 
+  /// <summary>
+  /// Function to get the entropy of the data examples
+  /// </summary>
+  /// <param name="dataExamples"></param>
+  /// <returns></returns>
   private float GetEntropy(ID3Learning[] dataExamples)
   {
     if (dataExamples.Length == 0) return 0f;
     int numExamples = dataExamples.Length;
-    var tallies = new Dictionary<Id3LearningAction, int>();
+    var dataTallies = new Dictionary<Id3LearningAction, int>();
+    //get tallies
     foreach (ID3Learning e in dataExamples)
     {
-      if (!tallies.ContainsKey(e.Action))
-        tallies.Add(e.Action, 0);
-      tallies[e.Action]++;
+      if (!dataTallies.ContainsKey(e.Action))
+        dataTallies.Add(e.Action, 0);
+      dataTallies[e.Action]++;
     }
-    int keysCount = tallies.Keys.Count;
-    if (keysCount == 0) return 0f;
+    int countOfKeys = dataTallies.Keys.Count;
+    if (countOfKeys == 0) return 0f;
     float entropy = 0f;
-    foreach (int tally in tallies.Values)
+    //calculate entropy of tallies
+    foreach (int tally in dataTallies.Values)
     {
       var proportion = tally / (float)numExamples;
       entropy -= proportion * Mathf.Log(proportion, 2);
@@ -45,6 +52,12 @@ public class ID3Decision : MonoBehaviour {
     return entropy;
   }
 
+  /// <summary>
+  /// Function to calculate entropy
+  /// </summary>
+  /// <param name="sets"></param>
+  /// <param name="numberOfExamples"></param>
+  /// <returns></returns>
   private float GetEntropy( Dictionary<float, List<ID3Learning>> sets, int numberOfExamples)
   {
     float entropy = 0f;
@@ -57,6 +70,13 @@ public class ID3Decision : MonoBehaviour {
   }
   #endregion
 
+  #region Public Functions
+  /// <summary>
+  /// Function to create the decision tree
+  /// </summary>
+  /// <param name="dataExamples"></param>
+  /// <param name="learningAttribute"></param>
+  /// <param name="node"></param>
   public void MakeTree( ID3Learning[] dataExamples, List<string> learningAttribute, DecisionNodeClass node)
   {
     float entropy = GetEntropy(dataExamples);
@@ -66,6 +86,7 @@ public class ID3Decision : MonoBehaviour {
     float gain = 0f;
     string splitAttribute = "";
     var bestSets = new Dictionary<float, List<ID3Learning>>();
+    //create sets
     foreach (string a in learningAttribute)
     {
       var sets = SplitByAttribute(dataExamples, a);
@@ -81,6 +102,7 @@ public class ID3Decision : MonoBehaviour {
     node.Value = splitAttribute;
     List<string> newAttributes = new List<string>(learningAttribute);
     newAttributes.Remove(splitAttribute);
+    //create tree
     foreach (List<ID3Learning> set in bestSets.Values)
     {
       float val = set[0].GetValue(splitAttribute);
@@ -89,4 +111,5 @@ public class ID3Decision : MonoBehaviour {
       MakeTree(set.ToArray(), newAttributes, child);
     }
   }
+  #endregion
 }

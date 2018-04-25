@@ -11,6 +11,7 @@ public enum HandState
 
 public class HandController : MonoBehaviour
 {
+    #region Properties
     public GameObject handIndicatorPrefab;
     private GameObject activeHandIndicator;
 
@@ -35,63 +36,9 @@ public class HandController : MonoBehaviour
 
     //KRISTINA
     AttackManager attackManagerScript;
+    #endregion
 
-    private void Awake()
-    {
-        //KRISTINA
-        attackManagerScript = GameObject.FindGameObjectWithTag("BossManager").GetComponent<AttackManager>();
-    }
-
-    private void FixedUpdate()
-    {
-        if(currentHandState == HandState.Fired)
-        {
-            if(currentDistance < maxDistance)
-            {
-                modifierDistance = targetDirection.magnitude * firePower;
-
-                currentDistance += modifierDistance;
-
-                transform.position += targetDirection * firePower;
-            }
-            else
-            {
-                currentHandState = HandState.Retract;
-            }
-        }
-
-        if(currentHandState == HandState.Retract)
-        {
-            if(currentDistance > 0)
-            {
-                modifierDistance = targetDirection.magnitude * firePower;
-
-                currentDistance -= modifierDistance;
-
-                transform.position += -targetDirection * firePower;
-            }
-            else
-            {
-                transform.position = homeTransform.transform.position;
-                transform.rotation = homeTransform.transform.rotation;
-
-                if(playerScript != null)
-                {
-                    playerScript.gameObject.transform.parent = null;
-
-                    playerScript.SetCanMove(true);
-                }
-
-                currentDistance = 0f;
-
-                currentHandState = HandState.Idle;
-
-                //KRISTINA WAS HERE
-                attackManagerScript.NextAttack = true;
-            }
-        }
-    }
-
+    #region Public Functions
     public void CreateIndicator(Vector3 pos_)
     {
         pos_.y = 0.007f;
@@ -106,6 +53,65 @@ public class HandController : MonoBehaviour
         activeHandIndicator = Instantiate(handIndicatorPrefab, pos_, Quaternion.identity);
 
         Invoke("FireGrab", 1f);
+    }
+    #endregion
+
+    #region Private Functions
+
+    private void Awake()
+    {
+        //KRISTINA
+        attackManagerScript = GameObject.FindGameObjectWithTag("BossManager").GetComponent<AttackManager>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (currentHandState == HandState.Fired)
+        {
+            if (currentDistance < maxDistance)
+            {
+                modifierDistance = targetDirection.magnitude * firePower;
+
+                currentDistance += modifierDistance;
+
+                transform.position += targetDirection * firePower;
+            }
+            else
+            {
+                currentHandState = HandState.Retract;
+            }
+        }
+
+        if (currentHandState == HandState.Retract)
+        {
+            if (currentDistance > 0)
+            {
+                modifierDistance = targetDirection.magnitude * firePower;
+
+                currentDistance -= modifierDistance;
+
+                transform.position += -targetDirection * firePower;
+            }
+          else
+          {
+              transform.position = homeTransform.transform.position;
+              transform.rotation = homeTransform.transform.rotation;
+
+              if (playerScript != null)
+              {
+                  playerScript.gameObject.transform.parent = null;
+
+                  playerScript.SetCanMove(true);
+              }
+
+              currentDistance = 0f;
+
+              currentHandState = HandState.Idle;
+
+              //KRISTINA WAS HERE
+              attackManagerScript.NextAttack = true;
+          }
+      }
     }
 
     private void FireGrab()
@@ -135,6 +141,7 @@ public class HandController : MonoBehaviour
                 playerScript.SetCanMove(false);
 
                 playerScript.ModifyCurrentHealth(-grabDamage);
+                //Craig Added learning data
                 var learning = FindObjectOfType<BossAttacks>();
                 learning.BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
                 {
@@ -148,4 +155,5 @@ public class HandController : MonoBehaviour
             }
         }
     }
+    #endregion
 }

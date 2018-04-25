@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class Ability_PhysicalRanged : Ability_Base
 {
+  #region Properties
   // cooldown
   // cooldownRemaining
   // range
   private Vector3 targetPosition;
-
   public GameObject projectile;
+  #endregion
 
+  #region Protected Functions
+  /// <summary>
+  /// Function to control indicator on key pressed
+  /// </summary>
   protected override void KeyDown()
   {
     rangeIndicator.SetActive(true);
   }
 
+  /// <summary>
+  /// Function to fire ability on key release
+  /// </summary>
   protected override void KeyUp()
   {
     rangeIndicator.SetActive(false);
@@ -33,6 +41,9 @@ public class Ability_PhysicalRanged : Ability_Base
     }
   }
 
+  /// <summary>
+  /// Function to activate the ability
+  /// </summary>
   protected override void UseAbility()
   {
     player.GetComponent<PF_Player>().ActivePower = PF_Player.PlayerAbilities.Physical;
@@ -64,4 +75,5 @@ public class Ability_PhysicalRanged : Ability_Base
     // Initiate the cooldown for the ability.
     cooldownRemaining = cooldown;
   }
+  #endregion
 }

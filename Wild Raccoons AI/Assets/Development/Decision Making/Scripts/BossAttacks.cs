@@ -8,7 +8,7 @@ using UnityEngine;
 //This scripts contains an implementation of boss attacks
 
 public class BossAttacks : MonoBehaviour {
-
+    #region Properties
     //Boss
     public GameObject boss;
 
@@ -53,8 +53,9 @@ public class BossAttacks : MonoBehaviour {
     private bool phase1;
     private bool phase2;
     private bool phase3;
+    #endregion
 
-
+    #region Private Functions
     //START
     private void Start()
     {
@@ -116,6 +117,7 @@ public class BossAttacks : MonoBehaviour {
     {
         if(bossStats.health< (bossStats.maxHealth/4)* 3 && !phase1)
         {
+            //Craig Added learning
             BlockLearn.BlockLearn();
             var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
             var max = results.Keys.Min();
@@ -124,6 +126,7 @@ public class BossAttacks : MonoBehaviour {
         }
         else if (bossStats.health < (bossStats.maxHealth / 4) * 2 && !phase2)
         {
+            //Craig Added learning
             BlockLearn.BlockLearn();
             var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
             var max = results.Keys.Min();
@@ -132,6 +135,7 @@ public class BossAttacks : MonoBehaviour {
         }
         else if (bossStats.health < (bossStats.maxHealth / 4) && !phase3)
         {
+            //Craig Added learning
             BlockLearn.BlockLearn();
             var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
             var max = results.Keys.Min();
@@ -139,10 +143,13 @@ public class BossAttacks : MonoBehaviour {
             phase3 = true;
         }
     }
+    #endregion
 
+    #region Public Functions
     //MELEE
     public void AttackMelee()
     {
+        //Craig Added learning
         meleeAttackScript.performMeleeAttack();
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
@@ -155,6 +162,7 @@ public class BossAttacks : MonoBehaviour {
     //Creates a bullet with given direction, speed and maximum distance from the boss
     public void shootThree()
     {
+        //Craig Added learning
         bulletPattern.ShootThreeBullets();
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
@@ -180,6 +188,7 @@ public class BossAttacks : MonoBehaviour {
     {
         boss.transform.position = orientationDictionary[orientation].position;  //Position
         boss.transform.rotation = orientationDictionary[orientation].rotation;  //Rotation
+        //Craig Added learning
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
           Lable = "Teleport",
@@ -194,6 +203,7 @@ public class BossAttacks : MonoBehaviour {
     public void applyPhysicalShield()
     {
         shieldScript.applyShield(shieldType.Physycal);
+        //Craig Added learning
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
           Lable = "Physical Shield",
@@ -205,6 +215,7 @@ public class BossAttacks : MonoBehaviour {
     public void applyMagicalShield()
     {
         shieldScript.applyShield(shieldType.Magical);
+        //Craig Added learning
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
           Lable = "Magic Shield",
@@ -217,6 +228,7 @@ public class BossAttacks : MonoBehaviour {
     public void shootLeftHand()
     {
         leftHandController.InitiateGrab(player.transform.position);
+        //Craig Added learning
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
           Lable = "Left Hand",
@@ -228,6 +240,7 @@ public class BossAttacks : MonoBehaviour {
     public void shootRightHand()
     {
         rightHandController.InitiateGrab(player.transform.position);
+        //Craig Added learning
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
           Lable = "Right Hand",
@@ -239,6 +252,7 @@ public class BossAttacks : MonoBehaviour {
     public void spawnEnemiesLeft()
     {
         leftHandController.CreateIndicator(player.transform.position);
+        //Craig Added learning
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
           Lable = "Spawn",
@@ -249,11 +263,12 @@ public class BossAttacks : MonoBehaviour {
     public void spawnEnemiesRight()
     {
         rightHandController.CreateIndicator(player.transform.position);
+        //Craig Added learning
         BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
         {
           Lable = "Spawn",
           Features = new List<string>() { "Initiated", "Attack" }
         });
     }
-
+    #endregion
 }

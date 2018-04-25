@@ -6,19 +6,32 @@ using System.Reflection;
 using UnityEngine;
 
 public class NaiveBayesLearning : MonoBehaviour {
+  #region Properties
   public List<InformationModel> Data = new List<InformationModel>();
   Classifier data;
+  #endregion
+
+  #region Public Functions
+  /// <summary>
+  /// Function to help with learning data
+  /// </summary>
   public void BlockLearn()
   {
     data = new Classifier();
     data.Teach(Data);
   }
 
+  /// <summary>
+  /// Function to get all probabilities from a list of strings 
+  /// </summary>
+  /// <param name="test"></param>
+  /// <returns></returns>
   public IDictionary<string, double> Classify(List<string> test)
   {
     IDictionary<string, double> dict = data.Classify(test);
     return dict;
   }
+  #endregion
 
   public class InformationModel
   {
@@ -32,18 +45,29 @@ public class NaiveBayesLearning : MonoBehaviour {
     /// </summary>
     public List<string> Features { get; set; }
   }
+
   public class Classifier
   {
-    private readonly Dictionary<string, List<string>> _allFeaturesOfCategory;
-    private List<InformationModel> _rawTrainingData;
+    #region Properties
+    private readonly Dictionary<string, List<string>> _allCategories;
+    private List<InformationModel> _rawDataToTrain;
+    #endregion
 
-
+    #region Constructor
     public Classifier()
     {
-      _allFeaturesOfCategory = new Dictionary<string, List<string>>();
-      _rawTrainingData = new List<InformationModel>();
+      _allCategories = new Dictionary<string, List<string>>();
+      _rawDataToTrain = new List<InformationModel>();
     }
+    #endregion
 
+    #region Public Functions
+
+    /// <summary>
+    /// Function to find the probability that a combination will match an attribute
+    /// </summary>
+    /// <param name="objectFeatures"></param>
+    /// <returns></returns>
     public Dictionary<string, double> Classify(List<string> objectFeatures)
     {
       if (objectFeatures == null)
@@ -52,35 +76,42 @@ public class NaiveBayesLearning : MonoBehaviour {
       if (objectFeatures.Count <= 0)
         throw new ArgumentException("Classified object does not contain any features.");
 
-      if (_allFeaturesOfCategory.Count <= 0)
+      if (_allCategories.Count <= 0)
         throw new ArgumentException("Classifier has not been trained. First use Teach method.");
 
-      return _allFeaturesOfCategory.ToDictionary(item => item.Key, item => CalculateProbability(item.Key, objectFeatures));
+      return _allCategories.ToDictionary(item => item.Key, item => CalculateProbability(item.Key, objectFeatures));
     }
 
+    /// <summary>
+    /// Function to get the data to be used by the classify function
+    /// </summary>
+    /// <param name="trainingDataSet"></param>
     public void Teach(List<InformationModel> trainingDataSet)
     {
       if (trainingDataSet == null)
         throw new ArgumentNullException();
 
-      _rawTrainingData = trainingDataSet;
+      _rawDataToTrain = trainingDataSet;
 
       foreach (var model in trainingDataSet)
       {
-        if (!_allFeaturesOfCategory.ContainsKey(model.Lable))
+        if (!_allCategories.ContainsKey(model.Lable))
         {
-          _allFeaturesOfCategory.Add(model.Lable, model.Features);
+          _allCategories.Add(model.Lable, model.Features);
         }
         else
         {
-          _allFeaturesOfCategory[model.Lable].AddRange(model.Features);
+          _allCategories[model.Lable].AddRange(model.Features);
         }
       }
 
     }
 
+    #endregion
+
+    #region Private Functions
     /// <summary>
-    /// Calculate probability for current lable.
+    /// Calculate probability for current label.
     /// </summary>
     /// <param name="label">Label</param>
     /// <param name="features">Features of object</param>
@@ -88,41 +119,30 @@ public class NaiveBayesLearning : MonoBehaviour {
     private double CalculateProbability(string label, List<string> features)
     {
       if (string.IsNullOrEmpty(label))
-        throw new ArgumentException("Empty lable");
+        throw new ArgumentException("Empty label");
 
       if (features == null)
         throw new ArgumentNullException();
 
+      var labelSetCount = _rawDataToTrain.Count(x => x.Lable == label);
+      double probabilityOfLabel = labelSetCount / Convert.ToDouble(_rawDataToTrain.Count);
 
-      //P(d) = ilosc_wystapien_danej_kategorii/ilosc_wszystkich_pozycji_na_liscie_treningowej
-      //P(v1|d) = ilosc_wystepowania_cechy_v1/ilosc_wystepowania_danej_kategorii_w_danych_treningowych
-
-      var currentLableSetCount = _rawTrainingData.Count(x => x.Lable == label);
-      double labelProbability = currentLableSetCount / Convert.ToDouble(_rawTrainingData.Count);
-
-      var objFeaturesProb = new List<double>();
+      var objectProbabilityOfFeature = new List<double>();
 
       foreach (var feature in features)
       {
-        //takes all features occurency from Dictionary which contain feature from training data.
-        var featureOccurency = _allFeaturesOfCategory[label].FindAll(p => p.Equals(feature)).Count;
+        //takes all features occurrence from Dictionary which contain feature from training data.
+        var occurency = _allCategories[label].FindAll(p => p.Equals(feature)).Count;
         //calculate a posteriori probability and add it to collection
-        var featurePosterioriProb = featureOccurency / Convert.ToDouble(currentLableSetCount);
+        var featurePosterioriProb = occurency / Convert.ToDouble(labelSetCount);
         //objFeaturesProp.Add(!featurePosterioriProb.Equals(0) ? featurePosterioriProb : 1);
-        if (!featurePosterioriProb.Equals(0)) objFeaturesProb.Add(featurePosterioriProb);
+        if (!featurePosterioriProb.Equals(0)) objectProbabilityOfFeature.Add(featurePosterioriProb);
       }
 
-      double result = objFeaturesProb.Aggregate(1.0, (current, item) => current * item) * labelProbability;
+      double result = objectProbabilityOfFeature.Aggregate(1.0, (current, item) => current * item) * probabilityOfLabel;
 
       return result;
     }
-
-    
-    public void SaveTrainingData(object modelInfos)
-    {
-      if (modelInfos == null)
-        throw new ArgumentNullException();
-
-    }
+    #endregion
   }
 }

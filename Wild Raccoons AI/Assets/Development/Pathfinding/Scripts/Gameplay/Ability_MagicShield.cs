@@ -4,22 +4,31 @@ using UnityEngine;
 
 public class Ability_MagicShield : Ability_Base
 {
+  #region Properties
   private bool isActive;
   public GameObject shield;
-
   private GameObject spawnedShield;
+  #endregion
+
   // Use this for initialization
+  #region Protected Functions
   protected override void KeyDown()
   {
 
   }
 
+  /// <summary>
+  /// Function to control ability when key is released
+  /// </summary>
   protected override void KeyUp()
   {
     if (player.GetComponent<PF_Player>().GetCurrentMana() < 10) return;
     UseAbility();
   }
 
+  /// <summary>
+  /// Function to activate ability
+  /// </summary>
   protected override void UseAbility()
   {
     player.GetComponent<PF_Player>().ActivePower = PF_Player.PlayerAbilities.Shield;
@@ -40,4 +49,5 @@ public class Ability_MagicShield : Ability_Base
       isActive = false;
     }
   }
+  #endregion
 }

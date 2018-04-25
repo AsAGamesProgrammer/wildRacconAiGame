@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class EnemyExplosion : MonoBehaviour
 {
+    #region Properties
+
     private PF_Player playerScript;
 
     public float explosionDamage = 150f;
 
     private bool damageDone = false;
+    #endregion
 
+    #region Private Functions
     private void Awake()
     {
         playerScript = FindObjectOfType<PF_Player>();
@@ -22,6 +26,7 @@ public class EnemyExplosion : MonoBehaviour
             if(!damageDone)
             {
                 playerScript.ModifyCurrentHealth(-explosionDamage);
+                //Craig Added Learning
                 var learning = FindObjectOfType<BossAttacks>();
                 damageDone = true;
                 learning.BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
@@ -32,4 +37,5 @@ public class EnemyExplosion : MonoBehaviour
             }
         }
     }
+    #endregion
 }

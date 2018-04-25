@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// TARGET: Buller prefab
+/// TARGET: Bullet prefab
 /// Moves the bullet forward
 /// </summary>
 
 public class BulletScript : MonoBehaviour {
 
+    #region Properties
     //Script
     BulletPattern bulletPattern;
 
@@ -26,9 +27,11 @@ public class BulletScript : MonoBehaviour {
     //Player
     GameObject playerModel;
     PF_Player playerScript;
+    #endregion
 
-	//START
-	void Start ()
+    #region Private Functions
+    //START
+    void Start ()
     {
         //Boss
         Boss = GameObject.FindGameObjectWithTag("Boss");
@@ -54,10 +57,10 @@ public class BulletScript : MonoBehaviour {
                     break;
             }
         }
-	}
+	  }
 	
-	//UPDATE
-	void Update ()
+	  //UPDATE
+	  void Update ()
     {
         transform.Translate(direction * speed * Time.deltaTime);
 
@@ -68,7 +71,7 @@ public class BulletScript : MonoBehaviour {
 
             Destroy(this.gameObject);
         }
-	}
+	  }
 
     //DO DAMAGE
     private void OnTriggerEnter(Collider other)
@@ -76,6 +79,7 @@ public class BulletScript : MonoBehaviour {
         if(other.gameObject == playerModel)
         {
             playerScript.ModifyCurrentHealth(damage * -1);
+            //Craig Added Learning
             var learning = FindObjectOfType<BossAttacks>();
             learning.GetComponent<BossAttacks>().BlockLearn.Data.Add(new NaiveBayesLearning.InformationModel()
             {
@@ -88,4 +92,5 @@ public class BulletScript : MonoBehaviour {
             Destroy(this.gameObject);
         }
     }
+    #endregion
 }

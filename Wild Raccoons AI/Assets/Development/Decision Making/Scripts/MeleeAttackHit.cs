@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeAttackHit : MonoBehaviour {
+  #region Properties
   GameObject playerModel;
   PF_Player playerScript;
   public int damage = 20;
+  #endregion
+
+  #region Private Functions
   // Use this for initialization
-  void Start () {
+  private void Start ()
+  {
+    //find player
     GameObject[] playerTagged = GameObject.FindGameObjectsWithTag("Player");
     foreach (var foundObject in playerTagged)
     {
@@ -40,4 +46,5 @@ public class MeleeAttackHit : MonoBehaviour {
       });
     }
   }
+  #endregion
 }
