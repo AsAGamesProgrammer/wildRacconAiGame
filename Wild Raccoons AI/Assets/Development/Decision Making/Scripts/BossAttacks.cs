@@ -121,6 +121,8 @@ public class BossAttacks : MonoBehaviour {
             BlockLearn.BlockLearn();
             var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
             var max = results.Keys.Min();
+            Debug.Log("The Max value is " + max);
+            
             IncreaseAbilityDamage(max);
             phase1 = true;
         }
@@ -130,6 +132,7 @@ public class BossAttacks : MonoBehaviour {
             BlockLearn.BlockLearn();
             var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
             var max = results.Keys.Min();
+            Debug.Log("The Max value is " + max);
             IncreaseAbilityDamage(max);
             phase2 = true;
         }
@@ -139,6 +142,7 @@ public class BossAttacks : MonoBehaviour {
             BlockLearn.BlockLearn();
             var results = BlockLearn.Classify(new List<string>() { "Hit", "Attack" });
             var max = results.Keys.Min();
+            Debug.Log("The Max value is " + max);
             IncreaseAbilityDamage(max);
             phase3 = true;
         }
